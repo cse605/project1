@@ -10,16 +10,16 @@ public class Main {
 		
 		f = new FDList<String> ("hi");
 		c = f.reader( f.head() );
-//		System.out.println("current element pointed by cursor..." + c.curr().toString());
-//		c.next();
-//		System.out.println("head in list..." + f.head().value());
-//		// # Test2
-//		// Check whether list is circular
-//		if (f.head() == c.curr()) {
-//			System.out.println("true");
-//		} else {
-//			System.out.println("false");
-//		}
+		System.out.println("current element pointed by cursor..." + c.curr().toString());
+		c.next();
+		System.out.println("head in list..." + f.head().value());
+		// # Test2
+		// Check whether list is circular
+		if (f.head() == c.curr()) {
+			System.out.println("true");
+		} else {
+			System.out.println("false");
+		}
 		// # Test 3
 		// Insert new element AFTER
 		c.writer().insertAfter("foo");
