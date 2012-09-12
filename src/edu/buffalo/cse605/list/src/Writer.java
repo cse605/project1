@@ -11,27 +11,46 @@ public class Writer<T> implements IWriter<T> {
 
 	@Override
 	public boolean insertBefore(T val) {
-		System.out.println("insert before");
+		//System.out.println("insert before");
 		Element<T> e = new Element<T>(val);
+		if(cursor.curr()==null)
+			cursor.curr(e);
+		else{
 		cursor.curr().addBefore(e);
 		cursor.prev();
-		return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean insertAfter(T val) {
-		System.out.println("insert after");
+		//System.out.println("insert after");
 		Element<T> e = new Element<T>(val);
-		cursor.curr().addAfter(e);
-		cursor.next();
+		if ( cursor.curr() == null ) {
+			 cursor.curr(e);
+			 
+		} else {
+			cursor.curr().addAfter(e);
+			cursor.next();
+		}
 		return true;
 	}
 
 	@Override
 	public boolean delete() {
-		System.out.println("delete");
+		//System.out.println("delete");
+		if(cursor.curr()==null)
+			throw new Error("the list is empty");
+		else if(cursor.getnext()==cursor.getprev() && cursor.getnext()==cursor.curr()){
+		    System.out.println("delete "+cursor.curr().value());//only one element in the list
+			cursor.curr(null);
+		}
+		else{
+			cursor.curr().delete();
+			cursor.curr(cursor.curr().prev());
+		}
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 }

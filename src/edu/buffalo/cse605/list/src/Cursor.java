@@ -10,6 +10,12 @@ public class Cursor<T> implements ICursor<T> {
 		this.curr = start; // Find out: Does it reference or assign ?
 	}
 	
+	// TODO: needs to be not exposed to public
+	public Element<T> curr(Element<T> curr) {
+		this.curr = curr;
+		return curr;
+	}
+	
 	@Override
 	public Element<T> curr() {
 		return this.curr;
@@ -17,9 +23,18 @@ public class Cursor<T> implements ICursor<T> {
 
 	@Override
 	public void next() {
-		this.curr = curr.next();
+		 this.curr = curr.next();
 	}
-
+    
+	
+	
+	public Element getnext(){
+		return this.curr.next();
+	}
+	
+	public Element getprev(){
+		return this.curr().prev();
+	}
 	@Override
 	public void prev() {
 		this.curr = curr.prev();
