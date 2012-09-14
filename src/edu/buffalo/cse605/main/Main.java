@@ -9,43 +9,34 @@ public class Main {
 		Cursor<String> c;
 		
 		f = new FDList<String> ("hi");
+		// Threading start
 		c = f.reader( f.head() );
-		System.out.println("current element pointed by cursor..." + c.curr().toString());
-		c.next();
-		System.out.println("head in list..." + f.head().value());
-		// # Test2
-		// Check whether list is circular
-		/*if (f.head() == c.curr()) {
-			System.out.println("true");
-		} else {
-			System.out.println("false");
-		}*/
-		// # Test 3
-		// Insert new element AFTER
-		/*c.writer().insertAfter("foo");
-		System.out.println("current element pointed by cursor..." + c.curr().toString());
-		c.prev();
-		System.out.println("prev current element pointed by cursor..." + c.curr().toString());
-		c.next();
-		c.next();
-		System.out.println("next current element pointed by cursor..." + c.curr().toString());*/
 		
-		// # Test 4
-		// Insert new element BEFORE
-//		c.writer().insertBefore("bar");
 //		System.out.println("current element pointed by cursor..." + c.curr().toString());
+//		c.next()	;
+//		System.out.println("head in list..." + f.head().value());
+//		// # Test2
+//		// Check whether list is circular
+//		if (f.head() == c.curr()) {
+//			System.out.println("true");
+//		} else {
+//			System.out.println("false");
+//		}
+
+		// Time taken to insert 100*64 elements
+		// spawn 64 threads
+		// each thread runs loop 1-100 insertBefore and insertAfter
 		
-       	c.writer().insertBefore("hi2");
-       
-         //c.writer().insertAfter("good");
-         
-         //c.writer().insertAfter("bad");
-         c.writer().delete();
-         c.writer().delete();
-         c.writer().insertAfter("good");
-         c.writer().insertAfter("bad");
-         c.writer().delete();
-         
+//		// # Test 3
+//		// Insert new element AFTER
+//		c.writer().insertAfter("1");
+//		c.writer().insertAfter("2");
+//		c.writer().insertAfter("3");
+//		c.writer().insertAfter("4");
+//		// # Test 4
+//		// Insert new element BEFORE
+//		c.writer().insertBefore("5");
+//		System.out.println("current element pointed by cursor..." + c.curr().toString());
 	}
 
 }
