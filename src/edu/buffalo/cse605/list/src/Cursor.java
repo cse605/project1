@@ -7,7 +7,7 @@ public class Cursor<T> implements ICursor<T> {
 	private Writer<T> writer = new Writer<T>(this);
 	
 	public Cursor(Element<T> start) {
-		this.curr = start; // Find out: Does it reference or assign ?
+		this.curr = start;
 	}
 	
 	// TODO: needs to be not exposed to public
@@ -25,8 +25,6 @@ public class Cursor<T> implements ICursor<T> {
 	public void next() {
 		 this.curr = curr.next();
 	}
-    
-	
 	
 	public Element getnext(){
 		return this.curr.next();

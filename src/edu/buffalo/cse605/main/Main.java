@@ -5,15 +5,15 @@ import edu.buffalo.cse605.list.src.Cursor;
 
 public class Main {
 	public static void main(String[] args) {
-		FDList<String> f;
-		Cursor<String> c;
-		
-		f = new FDList<String> ("hi");
+		FDList<String> f = new FDList<String> ("hi");
 		// Threading start
-		c = f.reader( f.head() );
+//		c = f.reader( f.head() );
+		for ( int i = 0; i < 64; i++ ) {
+			new Thread(new Tester<String>(f, i)).start();
+		}
 		
 //		System.out.println("current element pointed by cursor..." + c.curr().toString());
-//		c.next()	;
+//		c.next();
 //		System.out.println("head in list..." + f.head().value());
 //		// # Test2
 //		// Check whether list is circular
