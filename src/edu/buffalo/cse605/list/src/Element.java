@@ -42,47 +42,37 @@ public class Element<T> implements IElement<T> {
     
     // Add an element after this element
     protected boolean addAfter(Element<T> el) {
+    	el.next = this.next;
+    	el.prev = this;
     	
-             el.next=this.next;
-             el.prev=this;
-             if(this.prev.prev==this){//having two elements
-            	 this.prev.prev=el;
-            	 this.next=el;
-             }
-             else if(this.prev==this){//having one elements
-            	 this.prev=el;
-            	 this.next=el;
-            	 
-             }
-             else{
-            	 this.next.prev=el;
-            	 this.next=el;
-             }
-    	
-    	//this.next = el;
-    	//el.prev = this;
+    	if(this.prev == this) { // 1 elements
+    		this.prev = el;
+    		this.next = el;
+    	} else if(this.prev.prev == this) { // 2 elements
+    		this.prev.prev = el;
+    		this.next = el;
+    	} else {
+    		this.next.prev = el;
+    		this.next = el;
+    	}
     	return true;
     }
     
     // Add an element before this element
     protected boolean addBefore(Element<T> el) {
-    	    el.next = this;
-    		el.prev=this.prev;
-    		if(this.next==this){
-    			this.prev=el;
-    			this.next=el;
-    		}
-    		else if(this.next.next==this){
-    			this.next.next=el;
-    			this.prev=el;
-    		}
-    		else{
-    			this.prev=el;
-    			this.prev.prev=el;
-    		}
-    	
-    	
-    
+	    el.next = this;
+		el.prev = this.prev;
+		
+		if(this.next == this) { // 1 element
+			this.prev = el;
+			this.next = el;
+		} else if (this.next.next == this) { // 2 elements
+			this.next.next = el;
+			this.prev = el;
+		} else {
+			this.prev.next = el;
+			this.prev = el;
+		}
     	return true;
     }
      

@@ -27,13 +27,11 @@ public class Cursor<T> implements ICursor<T> {
 	}
 	
 	public Element<T> getnext(){
-		this.curr.next();
-		return this.curr;
+		return this.curr.next();
 	}
 	
 	public Element<T> getprev(){
-		this.curr().prev();
-		return this.curr;
+		return this.curr().prev();
 	}
 	@Override
 	public void prev() {

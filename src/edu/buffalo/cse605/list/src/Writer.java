@@ -12,11 +12,11 @@ public class Writer<T> implements IWriter<T> {
 	@Override
 	public boolean insertBefore(T val) {
 		Element<T> e = new Element<T>(val);
-		if(cursor.curr()==null)
+		if(cursor.curr() == null) {
 			cursor.curr(e);
-		else{
-		cursor.curr().addBefore(e);
-		cursor.prev();
+		} else{
+			cursor.curr().addBefore(e);
+			cursor.prev();
 		}
 		return true;
 	}
