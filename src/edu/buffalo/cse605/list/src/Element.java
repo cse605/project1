@@ -42,7 +42,7 @@ public class Element<T> implements IElement<T> {
     
     // Add an element after this element
     
-    protected synchronized boolean addAfter(Element<T> el) {
+    protected boolean addAfter(Element<T> el) {
     	el.next = this.next;
     	el.prev = this;
     	
@@ -61,7 +61,7 @@ public class Element<T> implements IElement<T> {
     
     // Add an element before this element
     
-    protected synchronized boolean addBefore(Element<T> el) {
+    protected boolean addBefore(Element<T> el) {
 	    el.next = this;
 		el.prev = this.prev;
 		
@@ -78,7 +78,7 @@ public class Element<T> implements IElement<T> {
     	return true;
     }
     
-    protected synchronized boolean delete(){
+    protected boolean delete(){
 //    	System.out.println("delete "+this.val);
     	if(this.next == this.prev && this.next != this){//two elements in the list
     		this.next.next = this.prev;

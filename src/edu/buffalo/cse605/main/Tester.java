@@ -18,10 +18,10 @@ public class Tester implements Runnable {
 		c = this.list.reader( this.list.head() );
 		long startTime = System.currentTimeMillis();
 		for ( int i = 0; i < 100000; i++ ) {
-			c.writer().insertAfter(i + "");
-			c.writer().delete();
-			c.writer().insertBefore(i + "");
-			c.writer().delete();
+			synchronized(list) {
+				c.writer().insertAfter(i + "");
+				c.writer().delete();
+			}
 		}
 		long endTime   = System.currentTimeMillis();
 		long totalTime = endTime - startTime;

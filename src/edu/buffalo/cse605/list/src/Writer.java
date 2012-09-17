@@ -10,7 +10,7 @@ public class Writer<T> implements IWriter<T> {
 	}
 
 	@Override
-	public boolean insertBefore(T val) {
+	public synchronized boolean insertBefore(T val) {
 		Element<T> e = new Element<T>(val);
 		if(cursor.curr() == null) {
 			cursor.curr(e);
@@ -22,7 +22,7 @@ public class Writer<T> implements IWriter<T> {
 	}
 
 	@Override
-	public boolean insertAfter(T val) {
+	public synchronized boolean insertAfter(T val) {
 		Element<T> e = new Element<T>(val);
 		if ( cursor.curr() == null ) {
 			 cursor.curr(e);
@@ -35,7 +35,7 @@ public class Writer<T> implements IWriter<T> {
 	}
 
 	@Override
-	public boolean delete() {
+	public synchronized boolean delete() {
 		//System.out.println("delete");
 		if (cursor.curr()==null) { 
 			throw new Error("the list is empty");

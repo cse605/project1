@@ -8,7 +8,6 @@ public class Main {
 		FDList<String> f = new FDList<String> ("hi");
 		Thread[] threads = new Thread[64];
 		Cursor<String> c;
-//		// Threading start
 		c = f.reader( f.head() );
 		
 		for (int i = 0; i < threads.length; i++) {
@@ -23,6 +22,10 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
+		
+		System.out.println("count => " + f.count);
+		System.out.println("current element pointed by cursor..." + c.curr().toString());
+		c.next();
 		
 		if (f.head() == c.curr()) {
 			System.out.println("true");
