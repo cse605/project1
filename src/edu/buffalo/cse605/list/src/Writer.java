@@ -40,7 +40,7 @@ public class Writer<T> implements IWriter<T> {
 		if (cursor.curr()==null) { 
 			throw new Error("the list is empty");
 		} else if (cursor.getnext() == cursor.getprev() && cursor.getnext() == cursor.curr()) {
-		    System.out.println("delete "+cursor.curr().value()); //only one element in the list
+//		    System.out.println("delete "+cursor.curr().value()); //only one element in the list
 			cursor.curr(null);
 		} else {
 			cursor.curr().delete();

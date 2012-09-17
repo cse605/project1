@@ -8,6 +8,7 @@ public class WriterFine<T> extends Writer<T> {
 	}
 
 	@Override
+	synchronized
 	public boolean insertBefore(T val) {
 		//System.out.println("insert before");
 		Element<T> e = new Element<T>(val);
@@ -23,6 +24,7 @@ public class WriterFine<T> extends Writer<T> {
 	}
 
 	@Override
+	synchronized
 	public boolean insertAfter(T val) {
 		//System.out.println("insert after");
 		Element<T> e = new Element<T>(val);
@@ -37,6 +39,7 @@ public class WriterFine<T> extends Writer<T> {
 	}
 
 	@Override
+	synchronized
 	public boolean delete() {
 		//System.out.println("delete");
 		if(cursor.curr()==null)
