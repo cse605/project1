@@ -8,6 +8,7 @@ public class Main {
 		FDList<String> f = new FDList<String> ("hi");
 		// Threading start
 //		c = f.reader( f.head() );
+		
 		for ( int i = 0; i < 64; i++ ) {
 			new Thread(new Tester<String>(f, i)).start();
 		}

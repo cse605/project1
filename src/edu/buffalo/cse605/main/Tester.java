@@ -18,7 +18,6 @@ public class Tester<T> implements Runnable {
 		c = this.list.reader( this.list.head() );
 		long startTime = System.currentTimeMillis();
 		for ( int i = 0; i < 100000; i++ ) {
-//			System.out.println("Inserting ... => " + i + " for thread " + this.hashCode());
 			c.writer().insertAfter((T) "1");
 		}
 		long endTime   = System.currentTimeMillis();
