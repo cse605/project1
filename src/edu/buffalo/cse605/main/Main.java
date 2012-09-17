@@ -1,7 +1,6 @@
 package edu.buffalo.cse605.main;
 
 import edu.buffalo.cse605.list.src.FDList;
-import edu.buffalo.cse605.list.src.Cursor;
 
 public class Main {
 	public static void main(String[] args) {
@@ -10,7 +9,7 @@ public class Main {
 //		c = f.reader( f.head() );
 		
 		for ( int i = 0; i < 64; i++ ) {
-			new Thread(new Tester<String>(f, i)).start();
+			new Thread(new Tester(f, i)).start();
 		}
 		
 //		System.out.println("current element pointed by cursor..." + c.curr().toString());

@@ -3,12 +3,12 @@ package edu.buffalo.cse605.main;
 import edu.buffalo.cse605.list.src.Cursor;
 import edu.buffalo.cse605.list.src.FDList;
 
-public class Tester<T> implements Runnable {
-	FDList<T> list;
-	Cursor<T> c;
+public class Tester implements Runnable {
+	FDList<String> list;
+	Cursor<String> c;
 	int id;
 	
-	public Tester(FDList<T> list, int id) {
+	public Tester(FDList<String> list, int id) {
 		this.list = list;
 		this.id = id;
 	}
@@ -18,7 +18,7 @@ public class Tester<T> implements Runnable {
 		c = this.list.reader( this.list.head() );
 		long startTime = System.currentTimeMillis();
 		for ( int i = 0; i < 100000; i++ ) {
-			c.writer().insertAfter((T) "1");
+			c.writer().insertAfter(i + "");
 		}
 		long endTime   = System.currentTimeMillis();
 		long totalTime = endTime - startTime;

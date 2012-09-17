@@ -26,12 +26,14 @@ public class Cursor<T> implements ICursor<T> {
 		 this.curr = curr.next();
 	}
 	
-	public Element getnext(){
-		return this.curr.next();
+	public Element<T> getnext(){
+		this.curr.next();
+		return this.curr;
 	}
 	
-	public Element getprev(){
-		return this.curr().prev();
+	public Element<T> getprev(){
+		this.curr().prev();
+		return this.curr;
 	}
 	@Override
 	public void prev() {
