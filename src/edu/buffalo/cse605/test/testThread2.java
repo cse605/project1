@@ -12,12 +12,12 @@ public class testThread2  extends Thread{
      }
      
      public void run(){
-    	 long startTime = System.currentTimeMillis();
+//    	 long startTime = System.currentTimeMillis();
     	 for(int j=0; j < 10000/i; j++){
         	 c.fwriter().insertBefore("beautiful" + j);
          }
-         long endTime   = System.currentTimeMillis();
-         long totalTime = endTime - startTime;
-         System.out.println("Thread-" + Thread.currentThread().getId() + " running time => " + totalTime);
+//         long endTime   = System.currentTimeMillis();
+//         long totalTime = endTime - startTime;
+//         System.out.println("Thread-" + Thread.currentThread().getId() + " running time => " + totalTime);
      }
 }

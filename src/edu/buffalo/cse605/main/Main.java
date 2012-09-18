@@ -12,9 +12,10 @@ public class Main {
 	public static void main(String[] args) {
 		FDListFine<String> f;		
 		f = new FDListFine<String> ("hi");
+		long ttime = 0;
 	
 //		FDListCoarse<String>  = new FDListCoarse<String> ("hi");
-		Thread[] threads = new Thread[64];
+		int nt = Integer.parseInt(args[0]);
 //		CursorCoarse<String> c;
 //		c = f.reader( f.head() );
 //		
@@ -25,29 +26,28 @@ public class Main {
 //		
 		
 //		
-		
-		for (int i = 1; i <= 64; i++) {
-			System.out.println("=========== No.of Threads => " + i + "=========");
+		System.out.println("=========== No.of Threads => " + nt + "=========");
+		for (int i = 0; i < 100; i++) {
 			long startTime = System.currentTimeMillis();
-			
-			for (int j = 0; j<i; j++) {
-				threads[j] = new Thread(new testThread2(f, i));
+			Thread[] threads = new Thread[nt];
+			for (int j = 0; j < nt ; j++) {
+				threads[j] = new Thread(new testThread2(f, nt));
 				threads[j].start();
 			}
 			
-			for (int j = 0; j<i; j++) {
+			for (int j = 0; j < nt; j++) {
 				try {
 					threads[j].join();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
-			
+
 			long endTime   = System.currentTimeMillis();
 			long totalTime = endTime - startTime;
-			System.out.println("Total running time => " + totalTime);
-			System.out.println("================ END ================");
+			ttime += totalTime;
 		}
+		System.out.println("Total running time => " + ttime/100);
 //
 		
 //		
