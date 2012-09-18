@@ -5,44 +5,38 @@ import edu.buffalo.cse605.list.FDList;
 import edu.buffalo.cse605.list.coarse.CursorCoarse;
 import edu.buffalo.cse605.list.coarse.FDListCoarse;
 import edu.buffalo.cse605.list.fine.FDListFine;
-import edu.buffalo.cse605.list.fine.testThread;
-import edu.buffalo.cse605.list.fine.testThread2;
+import edu.buffalo.cse605.test.testThread;
+import edu.buffalo.cse605.test.testThread2;
 
 public class Main {
 	public static void main(String[] args) {
 		FDListFine<String> f;		
-		f = new FDListFine<String> ("hi");	
-		testThread test1=new testThread(f);
-		testThread2 test2=new testThread2(f);
-//		testThread2 test3=new testThread2(f);
-		test1.start();
-		test2.start();
-//		test3.start();
+		f = new FDListFine<String> ("hi");
 	
-//		FDListCoarse<String> f = new FDListCoarse<String> ("hi");
-//		Thread[] threads = new Thread[8];
+//		FDListCoarse<String>  = new FDListCoarse<String> ("hi");
+		Thread[] threads = new Thread[1];
 //		CursorCoarse<String> c;
 //		c = f.reader( f.head() );
 //		
-//		for ( int i = 0; i < 100000; i++ ) {
+//		for ( int i = 0; i < 80000; i++ ) {
 //			c.writer().insertBefore(i+"");
 //		}
 //		c.prev();
 //		
-//		long startTime = System.currentTimeMillis();
+		long startTime = System.currentTimeMillis();
 //		
-//		for (int i = 0; i < threads.length; i++) {
-//		    threads[i] = new Thread(new Tester(f, i));
-//		    threads[i].start();
-//		}
+		for (int i = 0; i < threads.length; i++) {
+		    threads[i] = new Thread(new testThread2(f));
+		    threads[i].start();
+		}
 //
-//		for (Thread thread : threads) {
-//			try {
-//				thread.join();
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//		}
+		for (Thread thread : threads) {
+			try {
+				thread.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 //		
 //		System.out.println("count => " + f.count.get());
 //		System.out.println("current element pointed by cursor..." + c.curr().toString());
@@ -53,9 +47,9 @@ public class Main {
 //			System.out.println("false");
 //		}
 //		
-//		long endTime   = System.currentTimeMillis();
-//		long totalTime = endTime - startTime;
-//		System.out.println("Total running time => " + totalTime);
+		long endTime   = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		System.out.println("Total running time => " + totalTime);
 		
 //		System.out.println("current element pointed by cursor..." + c.curr().toString());
 //		c.next();

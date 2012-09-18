@@ -9,8 +9,6 @@ public class WriterFine<T> {
 
 	
 	public boolean insertBefore(T val) {
-		//System.out.println("insert before");
-		System.out.println("insertbefore "+val+" "+Thread.currentThread().getId());
 			ElementFine<T> e = new ElementFine<T>(val);
 			boolean prevl=false;
 			boolean nextl=false;
@@ -18,55 +16,40 @@ public class WriterFine<T> {
 			ElementFine<T> t1=cursor.curr();
 			ElementFine<T> t2=cursor.curr();
 			try {
-				while((!(prevl&&nextl))&&unchanged){
-					if(prevl){cursor.curr().prev().nextlock.unlock();}
-					if(nextl){cursor.curr().prevlock.unlock();}
-				  try{nextl=cursor.curr().prevlock.tryLock();
-				       t1=cursor.curr();
-				     prevl=cursor.curr().prev().nextlock.tryLock();	
-				       t2=cursor.curr().prev();
-				  }catch(NullPointerException e1){
-					  //cursor.curr(e);
-					  throw new Error("the cursor points to null");
-				  }
-				  if(nextl&&prevl){
-					  if(t1.prev()==t2)
-						  unchanged=true;
-					  else
-						  unchanged=false;
-				  }
+				while((!(prevl && nextl)) && unchanged){
+					if(prevl){
+						cursor.curr().prev().nextlock.unlock();
+					}
+					if(nextl) {
+						cursor.curr().prevlock.unlock();
+					}
+					try {
+						nextl = cursor.curr().prevlock.tryLock();
+					  	t1 = cursor.curr();
+					  	prevl = cursor.curr().prev().nextlock.tryLock();	
+					  	t2 = cursor.curr().prev();
+					} catch (NullPointerException e1){
+						//cursor.curr(e);
+						throw new Error("the cursor points to null");
+					}
+					if (nextl && prevl) {
+						if(t1.prev()==t2) {
+							unchanged = true;
+						} else {
+							unchanged=false;
+						}
+					}
 				}
-				
-				//System.out.println(cursor.curr());
-				//System.out.println(cursor.curr().prevlock);
-//				if(cursor.curr()==null)
-//					cursor.curr(e);
-				//else{
 				cursor.curr().addBefore(e);
 				cursor.prev();
-				//System.out.println(cursor.curr());
-				//} 
-				
-			}
-			finally{
-//				System.out.println("access succesfully"+cursor.curr().prev()+cursor.curr().next());
-//				System.out.println(cursor.curr().prev().nextlock);
-//				System.out.println(cursor.curr().next().prevlock);
-////				if(nextl){
-//					//cursor.curr().prev().nextlock.notifyAll();
-//					cursor.curr().prev().nextlock.notifyAll();
-////				}
-////				if(prevl){
-//					//cursor.curr().next().prevlock.await();
-//					cursor.curr().next().prevlock.notifyAll();
-////				}
-//				
-				if(nextl){cursor.curr().next().prevlock.unlock();}
-				if(prevl){cursor.curr().prev().nextlock.unlock();
-					
+			} finally {
+				if (nextl) {
+					cursor.curr().next().prevlock.unlock();
+				}
+				if (prevl) {
+					cursor.curr().prev().nextlock.unlock();
 				}
 			}
-			
 			return true;		
 			
 		

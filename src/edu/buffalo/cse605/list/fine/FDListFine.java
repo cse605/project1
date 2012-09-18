@@ -14,10 +14,7 @@ public class FDListFine<T> {
 	}
 	
 	public CursorFine<T> freader(ElementFine<T> start) {
-		if (cursor == null) {
-			cursor = new CursorFine<T>(start);
-		}
-		// TODO: Logical Fallacy, make sure I can call reader multiple times
+		cursor = new CursorFine<T>(start);
 		return this.cursor;
 	}
 }

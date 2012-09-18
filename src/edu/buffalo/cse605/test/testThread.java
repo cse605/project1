@@ -1,4 +1,7 @@
-package edu.buffalo.cse605.list.fine;
+package edu.buffalo.cse605.test;
+
+import edu.buffalo.cse605.list.fine.CursorFine;
+import edu.buffalo.cse605.list.fine.FDListFine;
 
 public class testThread extends Thread{
 	
