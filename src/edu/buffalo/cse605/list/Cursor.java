@@ -1,4 +1,4 @@
-package edu.buffalo.cse605.list.src;
+package edu.buffalo.cse605.list;
 
 import edu.buffalo.cse605.list.iface.ICursor;
 
@@ -6,8 +6,11 @@ public class Cursor<T> implements ICursor<T> {
 	private Element<T> curr;
 	private Writer<T> writer = new Writer<T>(this);
 	
-	public Cursor(Element<T> start) {
-		this.curr = start; // Find out: Does it reference or assign ?
+	public FDList<T> list;
+	
+	public Cursor(Element<T> start, FDList<T> list) {
+		this.list = list;
+		this.curr = start;
 	}
 	
 	// TODO: needs to be not exposed to public
@@ -25,14 +28,12 @@ public class Cursor<T> implements ICursor<T> {
 	public void next() {
 		 this.curr = curr.next();
 	}
-    
 	
-	
-	public Element getnext(){
+	public Element<T> getnext(){
 		return this.curr.next();
 	}
 	
-	public Element getprev(){
+	public Element<T> getprev(){
 		return this.curr().prev();
 	}
 	@Override

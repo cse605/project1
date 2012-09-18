@@ -1,51 +1,117 @@
 package edu.buffalo.cse605.main;
 
-import edu.buffalo.cse605.list.src.FDList;
-import edu.buffalo.cse605.list.src.Cursor;
+import edu.buffalo.cse605.list.Cursor;
+import edu.buffalo.cse605.list.FDList;
+import edu.buffalo.cse605.list.coarse.CursorCoarse;
+import edu.buffalo.cse605.list.coarse.FDListCoarse;
+import edu.buffalo.cse605.list.fine.FDListFine;
+import edu.buffalo.cse605.test.testThread;
+import edu.buffalo.cse605.test.testThread2;
 
 public class Main {
 	public static void main(String[] args) {
-		FDList<String> f;
-		Cursor<String> c;
-		
-		f = new FDList<String> ("hi");
-		c = f.reader( f.head() );
-		System.out.println("current element pointed by cursor..." + c.curr().toString());
-		c.next();
-		System.out.println("head in list..." + f.head().value());
-		// # Test2
-		// Check whether list is circular
-		/*if (f.head() == c.curr()) {
-			System.out.println("true");
-		} else {
-			System.out.println("false");
-		}*/
-		// # Test 3
-		// Insert new element AFTER
-		/*c.writer().insertAfter("foo");
-		System.out.println("current element pointed by cursor..." + c.curr().toString());
-		c.prev();
-		System.out.println("prev current element pointed by cursor..." + c.curr().toString());
-		c.next();
-		c.next();
-		System.out.println("next current element pointed by cursor..." + c.curr().toString());*/
-		
-		// # Test 4
-		// Insert new element BEFORE
-//		c.writer().insertBefore("bar");
+		FDListFine<String> f;		
+		f = new FDListFine<String> ("hi");
+	
+//		FDListCoarse<String>  = new FDListCoarse<String> ("hi");
+		Thread[] threads = new Thread[1];
+//		CursorCoarse<String> c;
+//		c = f.reader( f.head() );
+//		
+//		for ( int i = 0; i < 80000; i++ ) {
+//			c.writer().insertBefore(i+"");
+//		}
+//		c.prev();
+//		
+		long startTime = System.currentTimeMillis();
+//		
+		for (int i = 0; i < threads.length; i++) {
+		    threads[i] = new Thread(new testThread2(f));
+		    threads[i].start();
+		}
+//
+		for (Thread thread : threads) {
+			try {
+				thread.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+//		
+//		System.out.println("count => " + f.count.get());
 //		System.out.println("current element pointed by cursor..." + c.curr().toString());
+//		
+//		if (f.head() == c.curr()) {
+//			System.out.println("true");
+//		} else {
+//			System.out.println("false");
+//		}
+//		
+		long endTime   = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		System.out.println("Total running time => " + totalTime);
 		
-       	c.writer().insertBefore("hi2");
-       
-         //c.writer().insertAfter("good");
-         
-         //c.writer().insertAfter("bad");
-         c.writer().delete();
-         c.writer().delete();
-         c.writer().insertAfter("good");
-         c.writer().insertAfter("bad");
-         c.writer().delete();
-         
+//		System.out.println("current element pointed by cursor..." + c.curr().toString());
+//		c.next();
+//		System.out.println("head in list..." + f.head().value());
+//		
+//		// #Test 1
+//		c.writer().insertAfter("after");
+//		c.writer().delete();
+//		c.writer().insertBefore("before");
+//		c.writer().delete();
+//		
+//		// # Test2
+//		// Check whether list is circular
+//		if (f.head() == c.curr()) {
+//			System.out.println("true");
+//		} else {
+//			System.out.println("false");
+//		}
+//
+//		// # Test 3
+//		// Insert new element AFTER
+//		c.writer().insertAfter("1a");
+//		c.writer().insertAfter("2a");
+//		c.writer().insertAfter("3a");
+//		c.writer().insertAfter("4a");
+//		// # Validate Test 3;
+//		System.out.println("current element pointed by cursor..." + c.curr().toString());
+//		c.prev();
+//		System.out.println("current element pointed by cursor..." + c.curr().toString());
+//		c.prev();
+//		System.out.println("current element pointed by cursor..." + c.curr().toString());
+//		c.prev();
+//		System.out.println("current element pointed by cursor..." + c.curr().toString());
+//		c.prev();
+//		System.out.println("current element pointed by cursor..." + c.curr().toString());
+//		// # Test 4
+//		// Insert new element BEFORE
+//		c.writer().insertBefore("b4");
+//		c.writer().insertBefore("b3");
+//		c.writer().insertBefore("b2");
+//		c.writer().insertBefore("b1");
+//		// # Validate Test 3;
+//		System.out.println("current element pointed by cursor..." + c.curr().toString());
+//		c.next();
+//		System.out.println("current element pointed by cursor..." + c.curr().toString());
+//		c.next();
+//		System.out.println("current element pointed by cursor..." + c.curr().toString());
+//		c.next();
+//		System.out.println("current element pointed by cursor..." + c.curr().toString());
+//		c.next();
+//		System.out.println("current element pointed by cursor..." + c.curr().toString());
+//		// # Test 5
+//		// Delete all keys
+//		c.writer().delete();
+//		c.writer().delete();
+//		c.writer().delete();
+//		c.writer().delete();
+//		c.writer().delete();
+//		c.writer().delete();
+//		c.writer().delete();
+//		c.writer().delete();
+//		c.writer().delete();
 	}
 
 }
