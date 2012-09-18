@@ -1,6 +1,5 @@
 package edu.buffalo.cse605.finelist.src;
 
-import edu.buffalo.cse605.list.src.*;
 
 public class fineFDList<T> {
 	private fineElement<T> head;
