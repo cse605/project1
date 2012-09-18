@@ -14,7 +14,7 @@ public class Main {
 		f = new FDListFine<String> ("hi");
 	
 //		FDListCoarse<String>  = new FDListCoarse<String> ("hi");
-		Thread[] threads = new Thread[1];
+		Thread[] threads = new Thread[64];
 //		CursorCoarse<String> c;
 //		c = f.reader( f.head() );
 //		
@@ -23,20 +23,33 @@ public class Main {
 //		}
 //		c.prev();
 //		
-		long startTime = System.currentTimeMillis();
+		
 //		
-		for (int i = 0; i < threads.length; i++) {
-		    threads[i] = new Thread(new testThread2(f));
-		    threads[i].start();
+		
+		for (int i = 1; i <= 64; i++) {
+			System.out.println("=========== No.of Threads => " + i + "=========");
+			long startTime = System.currentTimeMillis();
+			
+			for (int j = 0; j<i; j++) {
+				threads[j] = new Thread(new testThread2(f, i));
+				threads[j].start();
+			}
+			
+			for (int j = 0; j<i; j++) {
+				try {
+					threads[j].join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			long endTime   = System.currentTimeMillis();
+			long totalTime = endTime - startTime;
+			System.out.println("Total running time => " + totalTime);
+			System.out.println("================ END ================");
 		}
 //
-		for (Thread thread : threads) {
-			try {
-				thread.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+		
 //		
 //		System.out.println("count => " + f.count.get());
 //		System.out.println("current element pointed by cursor..." + c.curr().toString());
@@ -47,9 +60,7 @@ public class Main {
 //			System.out.println("false");
 //		}
 //		
-		long endTime   = System.currentTimeMillis();
-		long totalTime = endTime - startTime;
-		System.out.println("Total running time => " + totalTime);
+		
 		
 //		System.out.println("current element pointed by cursor..." + c.curr().toString());
 //		c.next();

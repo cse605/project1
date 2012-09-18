@@ -1,2 +1,4 @@
-javac edu/buffalo/cse605/list/iface/*.java edu/buffalo/cse605/list/src/*.java edu/buffalo/cse605/main/*.java
+javac edu/buffalo/cse605/list/iface/*.java  edu/buffalo/cse605/list/*.java  
+      edu/buffalo/cse605/list/coarse/*.java    edu/buffalo/cse605/list/fine/*.java
+      edu/buffalo/cse605/main/*.java  edu/buffalo/cse605/test/*.java
 java edu/buffalo/cse605/main/Main

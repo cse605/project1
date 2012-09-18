@@ -5,14 +5,15 @@ import edu.buffalo.cse605.list.fine.FDListFine;
 
 public class testThread2  extends Thread{
      public CursorFine<String> c;
-     
-     public testThread2(FDListFine<String> f){
+     int i;
+     public testThread2(FDListFine<String> f, int i){
+    	 this.i = i;
     	 c = f.freader(f.head());
      }
      
      public void run(){
     	 long startTime = System.currentTimeMillis();
-    	 for(int j=0; j < 400000; j++){
+    	 for(int j=0; j < 10000/i; j++){
         	 c.fwriter().insertBefore("beautiful" + j);
          }
          long endTime   = System.currentTimeMillis();
