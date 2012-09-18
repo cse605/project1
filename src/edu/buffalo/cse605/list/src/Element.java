@@ -31,17 +31,17 @@ public class Element<T> implements IElement<T> {
     }
     
     // GET next Element
-    protected Element<T> next() {
+    public Element<T> next() {
     	return this.next;
     }
     
     // GET prev Element
-    protected Element<T> prev() {
+   public  Element<T> prev() {
     	return this.prev;
     }
     
     // Add an element after this element
-    protected boolean addAfter(Element<T> el) {
+    public  boolean addAfter(Element<T> el) {
     	
              el.next=this.next;
              el.prev=this;
@@ -65,7 +65,7 @@ public class Element<T> implements IElement<T> {
     }
     
     // Add an element before this element
-    protected boolean addBefore(Element<T> el) {
+   public boolean addBefore(Element<T> el) {
     	    el.next = this;
     		el.prev=this.prev;
     		if(this.next==this){
@@ -81,12 +81,11 @@ public class Element<T> implements IElement<T> {
     			this.prev.prev=el;
     		}
     	
-    	
     
     	return true;
     }
      
-    protected boolean delete(){
+    public boolean delete(){
     		System.out.println("delete "+this.val);
     		 if(this.next==this.prev && this.next!=this){//two elements in the list
     			this.next.next=this.prev;

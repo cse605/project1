@@ -3,10 +3,11 @@ package edu.buffalo.cse605.list.src;
 public class FDList<T> {
 	private Element<T> head;
 	private Cursor<T> cursor;
-	private int count = 0;
+	//private int count = 0;
 	
 	public FDList(T val) {
 		this.head = new Element<T>(val, null, null);
+		
 	}
 
 	public Element<T> head() {

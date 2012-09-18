@@ -37,13 +37,12 @@ public class Main {
 		
        	c.writer().insertBefore("hi2");
        
-         //c.writer().insertAfter("good");
-         
-         //c.writer().insertAfter("bad");
-         c.writer().delete();
-         c.writer().delete();
          c.writer().insertAfter("good");
+         
          c.writer().insertAfter("bad");
+         c.writer().delete();
+         c.writer().delete();
+         c.writer().delete();
          c.writer().delete();
          
 	}
