@@ -1,10 +1,11 @@
-package edu.buffalo.cse605.list.src;
+package edu.buffalo.cse605.list;
 
 import edu.buffalo.cse605.list.iface.IElement;
 
 public class Element<T> implements IElement<T> {
     private T val;
-    private Element<T> next, prev;
+    protected Element<T> next;
+	protected Element<T> prev;
     
     // Constructor
     public Element(T val) {
@@ -31,18 +32,17 @@ public class Element<T> implements IElement<T> {
     }
     
     // GET next Element
-    protected Element<T> next() {
+    public Element<T> next() {
     	return this.next;
     }
     
     // GET prev Element
-    protected Element<T> prev() {
+    public Element<T> prev() {
     	return this.prev;
     }
     
     // Add an element after this element
-    
-    protected boolean addAfter(Element<T> el) {
+    public boolean addAfter(Element<T> el) {
     	el.next = this.next;
     	el.prev = this;
     	
@@ -60,8 +60,7 @@ public class Element<T> implements IElement<T> {
     }
     
     // Add an element before this element
-    
-    protected boolean addBefore(Element<T> el) {
+    public boolean addBefore(Element<T> el) {
 	    el.next = this;
 		el.prev = this.prev;
 		
@@ -78,8 +77,7 @@ public class Element<T> implements IElement<T> {
     	return true;
     }
     
-    protected boolean delete(){
-//    	System.out.println("delete "+this.val);
+    public boolean delete() {
     	if(this.next == this.prev && this.next != this){//two elements in the list
     		this.next.next = this.prev;
     		this.next.prev = this.prev;

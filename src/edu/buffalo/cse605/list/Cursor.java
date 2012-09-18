@@ -1,4 +1,4 @@
-package edu.buffalo.cse605.list.src;
+package edu.buffalo.cse605.list;
 
 import edu.buffalo.cse605.list.iface.ICursor;
 
@@ -6,7 +6,10 @@ public class Cursor<T> implements ICursor<T> {
 	private Element<T> curr;
 	private Writer<T> writer = new Writer<T>(this);
 	
-	public Cursor(Element<T> start) {
+	public FDList<T> list;
+	
+	public Cursor(Element<T> start, FDList<T> list) {
+		this.list = list;
 		this.curr = start;
 	}
 	

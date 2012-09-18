@@ -1,7 +1,7 @@
 package edu.buffalo.cse605.list.iface;
 
-import edu.buffalo.cse605.list.src.Element;
-import edu.buffalo.cse605.list.src.Writer;
+import edu.buffalo.cse605.list.Element;
+import edu.buffalo.cse605.list.Writer;
 
 public interface ICursor<T> {
 	public Element<T> curr();
