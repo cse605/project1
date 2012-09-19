@@ -35,10 +35,6 @@ public class WriterFine<T> {
 			
 		} catch (Exception e1) {
 			e1.printStackTrace();
-		} finally {
-			// This shouldn`t mess up
-//			prev.nextlock.unlock();
-//			cursor.getnext().prevlock.unlock();
 		}
 		return true;
 	}
@@ -70,11 +66,7 @@ public class WriterFine<T> {
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
-		} finally {
-			// This shouldn`t mess up
-//			next.prevlock.unlock();
-//			cursor.getprev().nextlock.unlock();
-		}
+		} 
 		return true;
 	}
 

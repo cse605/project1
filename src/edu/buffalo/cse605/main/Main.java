@@ -2,7 +2,8 @@ package edu.buffalo.cse605.main;
 
 import edu.buffalo.cse605.list.fine.CursorFine;
 import edu.buffalo.cse605.list.fine.FDListFine;
-import edu.buffalo.cse605.test.testThread2;
+import edu.buffalo.cse605.test.insertLeft;
+import edu.buffalo.cse605.test.insertRight;
 
 public class Main {
 	public static void main(String[] args) {
@@ -25,9 +26,11 @@ public class Main {
 		for (int i = 0; i < 10; i++) {
 			long startTime = System.currentTimeMillis();
 			Thread[] threads = new Thread[nt];
-			for (int j = 0; j < nt ; j++) {
-				threads[j] = new Thread(new testThread2(f, nt));
+			for (int j = 0; j < nt ; j+=2) {
+				threads[j] = new Thread(new insertLeft(f, nt));
+				threads[j+1] = new Thread(new insertRight(f, nt));
 				threads[j].start();
+				threads[j+1].start();
 			}
 			
 			for (int j = 0; j < nt; j++) {
