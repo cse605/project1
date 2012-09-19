@@ -4,6 +4,8 @@ import edu.buffalo.cse605.list.fine.CursorFine;
 import edu.buffalo.cse605.list.fine.FDListFine;
 import edu.buffalo.cse605.test.insertLeft;
 import edu.buffalo.cse605.test.insertRight;
+import edu.buffalo.cse605.test.readNext;
+import edu.buffalo.cse605.test.readPrev;
 
 public class Main {
 	public static void main(String[] args) {
@@ -12,7 +14,7 @@ public class Main {
 		long ttime = 0;
 	
 //		FDListCoarse<String>  = new FDListCoarse<String> ("hi");
-		int nt = 64;//Integer.parseInt(args[0]);
+		int nt = 32;//Integer.parseInt(args[0]);
 //		CursorFine<String> c;
 //		c = f.reader( f.head() );
 //		
@@ -21,7 +23,9 @@ public class Main {
 //		}
 //		c.prev();
 		
-
+		new Thread(new readNext(f, 16));
+		new Thread(new readPrev(f, 16));
+		
 		System.out.println("=========== No.of Threads => " + nt + "=========");
 		for (int i = 0; i < 10; i++) {
 			long startTime = System.currentTimeMillis();
