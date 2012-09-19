@@ -27,8 +27,8 @@ public class Main {
 			long startTime = System.currentTimeMillis();
 			Thread[] threads = new Thread[nt];
 			for (int j = 0; j < nt ; j+=2) {
-				threads[j] = new Thread(new insertLeft(f, nt));
-				threads[j+1] = new Thread(new insertRight(f, nt));
+				threads[j] = new Thread(new insertLeft(f, nt/2));
+				threads[j+1] = new Thread(new insertRight(f, nt/2));
 				threads[j].start();
 				threads[j+1].start();
 			}
