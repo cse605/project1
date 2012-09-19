@@ -8,13 +8,14 @@ public class testThread2  extends Thread{
      int i;
      public testThread2(FDListFine<String> f, int i){
     	 this.i = i;
-    	 c = f.freader(f.head());
+    	 c = f.reader(f.head());
      }
      
      public void run(){
 //    	 long startTime = System.currentTimeMillis();
-    	 for(int j=0; j < 10000/i; j++){
-        	 c.fwriter().insertBefore("beautiful" + j);
+    	 for(int j=0; j < 100000/i; j++){
+        	 c.writer().insertBefore("beautiful" + j);
+        	 c.writer().insertAfter("beautiful" + j);
          }
 //         long endTime   = System.currentTimeMillis();
 //         long totalTime = endTime - startTime;

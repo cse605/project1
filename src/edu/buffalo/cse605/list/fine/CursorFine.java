@@ -28,13 +28,11 @@ public class CursorFine<T>  {
 		 this.curr = curr.next();
 	}
     
-	
-	
-	public ElementFine getnext(){
+	public ElementFine<T> getnext(){
 		return this.curr.next();
 	}
 	
-	public ElementFine getprev(){
+	public ElementFine<T> getprev(){
 		return this.curr().prev();
 	}
 
@@ -43,7 +41,7 @@ public class CursorFine<T>  {
 	}
 
 	
-	public WriterFine<T> fwriter() {
+	public WriterFine<T> writer() {
 		return writer;
 	}
 

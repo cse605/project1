@@ -13,7 +13,7 @@ public class FDListFine<T> {
 		return this.head;
 	}
 	
-	public CursorFine<T> freader(ElementFine<T> start) {
+	public CursorFine<T> reader(ElementFine<T> start) {
 		cursor = new CursorFine<T>(start);
 		return this.cursor;
 	}

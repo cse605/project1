@@ -1,11 +1,7 @@
 package edu.buffalo.cse605.main;
 
-import edu.buffalo.cse605.list.Cursor;
-import edu.buffalo.cse605.list.FDList;
-import edu.buffalo.cse605.list.coarse.CursorCoarse;
-import edu.buffalo.cse605.list.coarse.FDListCoarse;
+import edu.buffalo.cse605.list.fine.CursorFine;
 import edu.buffalo.cse605.list.fine.FDListFine;
-import edu.buffalo.cse605.test.testThread;
 import edu.buffalo.cse605.test.testThread2;
 
 public class Main {
@@ -15,19 +11,18 @@ public class Main {
 		long ttime = 0;
 	
 //		FDListCoarse<String>  = new FDListCoarse<String> ("hi");
-		int nt = Integer.parseInt(args[0]);
-//		CursorCoarse<String> c;
+		int nt = 4;//Integer.parseInt(args[0]);
+//		CursorFine<String> c;
 //		c = f.reader( f.head() );
 //		
-//		for ( int i = 0; i < 80000; i++ ) {
+//		for ( int i = 0; i < 10000; i++ ) {
 //			c.writer().insertBefore(i+"");
 //		}
 //		c.prev();
-//		
 		
-//		
+
 		System.out.println("=========== No.of Threads => " + nt + "=========");
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			long startTime = System.currentTimeMillis();
 			Thread[] threads = new Thread[nt];
 			for (int j = 0; j < nt ; j++) {
@@ -47,10 +42,9 @@ public class Main {
 			long totalTime = endTime - startTime;
 			ttime += totalTime;
 		}
-		System.out.println("Total running time => " + ttime/100);
-//
+		System.out.println("Total running time => " + ttime/2);
+
 		
-//		
 //		System.out.println("count => " + f.count.get());
 //		System.out.println("current element pointed by cursor..." + c.curr().toString());
 //		
@@ -58,10 +52,8 @@ public class Main {
 //			System.out.println("true");
 //		} else {
 //			System.out.println("false");
-//		}
+//		}		
 //		
-		
-		
 //		System.out.println("current element pointed by cursor..." + c.curr().toString());
 //		c.next();
 //		System.out.println("head in list..." + f.head().value());
@@ -123,6 +115,14 @@ public class Main {
 //		c.writer().delete();
 //		c.writer().delete();
 //		c.writer().delete();
+//		
+//		// deleted last element ?
+//		if (c.curr() == null) {
+//			System.out.println("no elements left");
+//		} else {
+//			System.out.println("elements left");
+//		}
+		
 	}
 
 }
