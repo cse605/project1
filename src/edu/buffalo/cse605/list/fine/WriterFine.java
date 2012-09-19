@@ -1,5 +1,6 @@
 package edu.buffalo.cse605.list.fine;
 
+
 public class WriterFine<T> {
     private CursorFine<T> cursor; 
  	
@@ -24,13 +25,14 @@ public class WriterFine<T> {
 						curr.addBefore(e);
 						cursor.prev();
 					}
+					cursor.getnext().prevlock.unlock();
+					prev.nextlock.unlock();
 					break;
 				} else {
 					throw new Exception("inconsitent");
 				}
 			}
-			cursor.getnext().prevlock.unlock();
-			prev.nextlock.unlock();
+			
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		} finally {
@@ -59,13 +61,13 @@ public class WriterFine<T> {
 						curr.addAfter(e);
 						cursor.next();
 					}
+					cursor.getprev().nextlock.unlock();
+					next.prevlock.unlock();
 					break;
 				} else {
 					throw new Exception("inconsitent");
 				}
 			}
-			cursor.getprev().nextlock.unlock();
-			next.prevlock.unlock();
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		} finally {
@@ -102,6 +104,8 @@ public class WriterFine<T> {
 						// Move the cursor to previous
 						cursor.curr(prev);
 					}
+					prev.nextlock.unlock();
+					next.prevlock.unlock();
 					break;
 				} else {
 					throw new Exception("inconsitent");
@@ -109,10 +113,6 @@ public class WriterFine<T> {
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
-		} finally {
-			// This shouldn`t mess up
-			prev.nextlock.unlock();
-			next.prevlock.unlock();
 		}
 		return true;
 	}

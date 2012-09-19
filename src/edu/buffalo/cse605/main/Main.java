@@ -11,7 +11,7 @@ public class Main {
 		long ttime = 0;
 	
 //		FDListCoarse<String>  = new FDListCoarse<String> ("hi");
-		int nt = 4;//Integer.parseInt(args[0]);
+		int nt = 64;//Integer.parseInt(args[0]);
 //		CursorFine<String> c;
 //		c = f.reader( f.head() );
 //		
@@ -42,7 +42,7 @@ public class Main {
 			long totalTime = endTime - startTime;
 			ttime += totalTime;
 		}
-		System.out.println("Total running time => " + ttime/2);
+		System.out.println("Total running time => " + ttime/10);
 
 		
 //		System.out.println("count => " + f.count.get());
