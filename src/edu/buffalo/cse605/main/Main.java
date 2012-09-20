@@ -2,6 +2,8 @@ package edu.buffalo.cse605.main;
 
 import edu.buffalo.cse605.list.fine.CursorFine;
 import edu.buffalo.cse605.list.fine.FDListFine;
+import edu.buffalo.cse605.list.rw.CursorRW;
+import edu.buffalo.cse605.list.rw.FDListRW;
 import edu.buffalo.cse605.test.insertLeft;
 import edu.buffalo.cse605.test.insertRight;
 import edu.buffalo.cse605.test.readNext;
@@ -11,9 +13,13 @@ public class Main {
 	public static void main(String[] args) {
 		FDListFine<String> f;		
 		f = new FDListFine<String> ("hi");
-		long ttime = 0;
-		
 		CursorFine<String> c = f.reader( f.head() );
+		
+		FDListRW<String> frw;		
+		frw = new FDListRW<String> ("hi");
+		CursorRW<String> crw = frw.reader( frw.head() );
+		
+		long ttime = 0;
 		int nt = 8;//Integer.parseInt(args[0]);
 		int it = 1;
 		

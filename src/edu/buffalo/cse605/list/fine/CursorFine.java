@@ -21,9 +21,6 @@ public class CursorFine<T> extends Cursor<T> {
 				curr.nextlock.unlock();
 				break;
 			} else {
-				if ( curr.nextlock.isHeldByCurrentThread() ) {
-					curr.nextlock.unlock();
-				}
 				Thread.yield();
 			}
 		}
@@ -39,9 +36,6 @@ public class CursorFine<T> extends Cursor<T> {
 				curr.prevlock.unlock();
 				break;
 			} else {
-				if ( curr.prevlock.isHeldByCurrentThread() ) {
-					curr.prevlock.unlock();
-				}
 				Thread.yield();
 			}
 		}

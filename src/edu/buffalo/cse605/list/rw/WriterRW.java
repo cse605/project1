@@ -1,5 +1,7 @@
 package edu.buffalo.cse605.list.rw;
 
+import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
+
 import edu.buffalo.cse605.list.Writer;
 
 public class WriterRW<T> extends Writer<T> { 
@@ -14,14 +16,18 @@ public class WriterRW<T> extends Writer<T> {
 		ElementRW<T> e = new ElementRW<T>(val);
 		ElementRW<T> prev;
 		ElementRW<T> curr;
+		WriteLock wprev;
+		WriteLock wcurr;
 		try {
 			while ( true ) {
 				prev = (ElementRW<T>) cursor.getprev();
 				curr = (ElementRW<T>) cursor.curr();
+				wprev = prev.rwnextlock.writeLock();
+				wcurr = prev.rwprevlock.writeLock();
 				// Make sure they are still pointing to the ones they were supposed to point
 				// This messes the performance
-				if ( prev.nextlock.tryLock() &&
-					 curr.prevlock.tryLock() &&
+				if ( wprev.tryLock() &&
+					 wcurr.tryLock() &&
 					 prev.next() == curr && 
 					 curr.prev() == prev ) {
 					if ( cursor.curr() == null ) {
@@ -29,16 +35,16 @@ public class WriterRW<T> extends Writer<T> {
 					} else {
 						curr.addBefore(e);
 					}
-					curr.prevlock.unlock();
-					prev.nextlock.unlock();
+					wcurr.unlock();
+					wprev.unlock();
 					cursor.prev();
 					break;
 				} else {
-					if ( curr.prevlock.isHeldByCurrentThread() ) {
-						curr.prevlock.unlock();
+					if ( wcurr.isHeldByCurrentThread() ) {
+						wcurr.unlock();
 					}
-					if ( prev.nextlock.isHeldByCurrentThread() ) {
-						prev.nextlock.unlock();
+					if ( wprev.isHeldByCurrentThread() ) {
+						wprev.unlock();
 					}
 					Thread.yield();
 				}
@@ -56,14 +62,18 @@ public class WriterRW<T> extends Writer<T> {
 		ElementRW<T> e = new ElementRW<T>(val);
 		ElementRW<T> next;
 		ElementRW<T> curr;
+		WriteLock wnext;
+		WriteLock wcurr;
 		try {
 			while ( true ) {
 				next = (ElementRW<T>) cursor.getnext();
 				curr = (ElementRW<T>) cursor.curr();
+				wnext = next.rwprevlock.writeLock();
+				wcurr = curr.rwnextlock.writeLock();
 				// Make sure they are still pointing to the ones they were supposed to point
 				// This messes the performance
-				if ( next.prevlock.tryLock() &&
-					 curr.nextlock.tryLock() &&
+				if ( wnext.tryLock() &&
+					 wcurr.tryLock() &&
 					 next.prev() == cursor.curr() && 
 					 curr.next() == next ) {
 					if ( cursor.curr() == null ) {
@@ -72,15 +82,15 @@ public class WriterRW<T> extends Writer<T> {
 						curr.addAfter(e);
 						cursor.next();
 					}
-					next.prevlock.unlock();
-					curr.nextlock.unlock();
+					wnext.unlock();
+					wcurr.unlock();
 					break;
 				} else {
-					if ( curr.nextlock.isHeldByCurrentThread() ) {
-						curr.nextlock.unlock();
+					if ( wcurr.isHeldByCurrentThread() ) {
+						wcurr.unlock();
 					}
-					if ( next.prevlock.isHeldByCurrentThread() ) {
-						next.prevlock.unlock();
+					if ( wnext.isHeldByCurrentThread() ) {
+						wnext.unlock();
 					}
 					Thread.yield();
 				}
