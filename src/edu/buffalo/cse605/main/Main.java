@@ -23,8 +23,8 @@ public class Main {
 	public static void main(String[] args) {
 //		ExecutorService e = Executors.newFixedThreadPool(64);
 //		FDList<String> f = new FDList<String> ("hi");
-		FDListCoarse<String> f = new FDListCoarse<String> ("hi");
-//		FDListFine<String> f = new FDListFine<String> ("hi");
+//		FDListCoarse<String> f = new FDListCoarse<String> ("hi");
+		FDListFine<String> f = new FDListFine<String> ("hi");
 //		FDListCRW<String> f = new FDListCRW<String> ("hi");
 //		FDListRW<String> f = new FDListRW<String> ("hi");
 		
@@ -32,17 +32,22 @@ public class Main {
 		Cursor<String> temp = f.reader( f.head() );
 		int m = 0, n = 0;
 		
+		int mb = 1024*1024;
+        
+        //Getting the runtime reference from system
+        Runtime runtime = Runtime.getRuntime();
+		
 		long ttime = 0;
-		int nt = 4;//Integer.parseInt(args[0]);
-		int it = 1;
+		int nt = 64;//Integer.parseInt(args[0]);
+		int it = 10;
 		
 //		for ( int i = 0; i < 10000; i++ ) {
 //			c.writer().insertBefore(i+"");
 //		}
 //		c.prev();
 		
-		new Thread(new readNext(f.reader( f.head() )));
-		new Thread(new readPrev(f.reader( f.head() )));
+//		new Thread(new readNext(f.reader( f.head() ))).start();
+//		new Thread(new readPrev(f.reader( f.head() ))).start();
 		
 		System.out.println("=========== No.of Threads => " + nt + " =========");
 		for (int i = 0; i < it; i++) {
@@ -86,6 +91,23 @@ public class Main {
 			temp.prev();
 		}
 		System.out.println("Total List count => " + m + " => " + n + " => " + f.count);
+		
+         
+        System.out.println("##### Heap utilization statistics [MB] #####");
+         
+        //Print used memory
+        System.out.println("Used Memory:"
+            + (runtime.totalMemory() - runtime.freeMemory()) / mb);
+ 
+        //Print free memory
+        System.out.println("Free Memory:"
+            + runtime.freeMemory() / mb);
+         
+        //Print total available memory
+        System.out.println("Total Memory:" + runtime.totalMemory() / mb);
+ 
+        //Print Maximum available memory
+        System.out.println("Max Memory:" + runtime.maxMemory() / mb);
 
 //		System.out.println("current element pointed by cursor..." + c.curr().toString());
 //		
