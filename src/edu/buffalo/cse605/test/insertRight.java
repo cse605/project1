@@ -17,7 +17,7 @@ public class insertRight  extends Thread{
      
      @Override
 	public void run() {
-    	 for(int j=0; j < 20000/nt; j++){
+    	 for(int j=0; j < 100000/nt; j++){
         	 c.writer().insertAfter("beautiful" + j);
          }
      }

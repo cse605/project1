@@ -9,8 +9,9 @@ import edu.buffalo.cse605.list.coarse.CursorCoarse;
 import edu.buffalo.cse605.list.coarse.FDListCoarse;
 import edu.buffalo.cse605.list.fine.CursorFine;
 import edu.buffalo.cse605.list.fine.FDListFine;
-import edu.buffalo.cse605.list.customrw.CursorRW;
-import edu.buffalo.cse605.list.customrw.FDListRW;
+import edu.buffalo.cse605.list.rw.FDListRW;
+import edu.buffalo.cse605.list.customrw.CursorCRW;
+import edu.buffalo.cse605.list.customrw.FDListCRW;
 import edu.buffalo.cse605.test.insertLeft;
 import edu.buffalo.cse605.test.insertLeftCoarse;
 import edu.buffalo.cse605.test.insertRight;
@@ -22,9 +23,10 @@ public class Main {
 	public static void main(String[] args) {
 //		ExecutorService e = Executors.newFixedThreadPool(64);
 //		FDList<String> f = new FDList<String> ("hi");
-//		FDListCoarse<String> f = new FDListCoarse<String> ("hi");
+		FDListCoarse<String> f = new FDListCoarse<String> ("hi");
 //		FDListFine<String> f = new FDListFine<String> ("hi");
-		FDListRW<String> f = new FDListRW<String> ("hi");
+//		FDListCRW<String> f = new FDListCRW<String> ("hi");
+//		FDListRW<String> f = new FDListRW<String> ("hi");
 		
 		Cursor<String> c;
 		Cursor<String> temp = f.reader( f.head() );
@@ -39,8 +41,8 @@ public class Main {
 //		}
 //		c.prev();
 		
-//		new Thread(new readNext(f.reader( f.head() )));
-//		new Thread(new readPrev(f.reader( f.head() )));
+		new Thread(new readNext(f.reader( f.head() )));
+		new Thread(new readPrev(f.reader( f.head() )));
 		
 		System.out.println("=========== No.of Threads => " + nt + " =========");
 		for (int i = 0; i < it; i++) {

@@ -10,7 +10,6 @@ public class ReadWriteLock {
 	private int writeRequests    = 0;
 	private Thread writingThread = null;
 
-
 	public synchronized void lockRead() throws InterruptedException{
 	    Thread callingThread = Thread.currentThread();
 	    while(! canGrantReadAccess(callingThread) ) {
@@ -44,7 +43,7 @@ public class ReadWriteLock {
 	public synchronized void lockWrite() throws InterruptedException{
 	    writeRequests++;
 	    Thread callingThread = Thread.currentThread();
-	    while(! canGrantWriteAccess(callingThread)){
+	    while(! canGrantWriteAccess(callingThread) ){
 	      wait();
 	    }
 	    writeRequests--;

@@ -5,22 +5,22 @@ import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 import edu.buffalo.cse605.list.Writer;
 import edu.buffalo.cse605.lock.ReadWriteLock;
 
-public class WriterRW<T> extends Writer<T> { 
+public class WriterCRW<T> extends Writer<T> { 
  	
-	public WriterRW(CursorRW<T> cursor) {
+	public WriterCRW(CursorCRW<T> cursor) {
 		super(cursor);
 		this.cursor = cursor;
 	}
 
 	@Override
 	public boolean insertBefore(T val) {
-		ElementRW<T> e = new ElementRW<T>(val);
-		ElementRW<T> prev;
-		ElementRW<T> curr;
+		ElementCRW<T> e = new ElementCRW<T>(val);
+		ElementCRW<T> prev;
+		ElementCRW<T> curr;
 		try {
 			while ( true ) {
-				prev = (ElementRW<T>) cursor.getprev();
-				curr = (ElementRW<T>) cursor.curr();
+				prev = (ElementCRW<T>) cursor.getprev();
+				curr = (ElementCRW<T>) cursor.curr();
 				prev.rwcnextlock.lockWrite();
 				curr.rwcprevlock.lockWrite();
 				// Make sure they are still pointing to the ones they were supposed to point
@@ -36,26 +36,28 @@ public class WriterRW<T> extends Writer<T> {
 					prev.rwcnextlock.unlockWrite();
 					break;
 				} 
+				curr.rwcprevlock.unlockWrite();
+				prev.rwcnextlock.unlockWrite();
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		cursor.prev();
+//		cursor.prev();
 		return true;
 	}
 
 
 	@Override
 	public boolean insertAfter(T val) {
-		ElementRW<T> e = new ElementRW<T>(val);
-		ElementRW<T> next;
-		ElementRW<T> curr;
+		ElementCRW<T> e = new ElementCRW<T>(val);
+		ElementCRW<T> next;
+		ElementCRW<T> curr;
 		WriteLock wnext;
 		WriteLock wcurr;
 		try {
 			while ( true ) {
-				next = (ElementRW<T>) cursor.getnext();
-				curr = (ElementRW<T>) cursor.curr();
+				next = (ElementCRW<T>) cursor.getnext();
+				curr = (ElementCRW<T>) cursor.curr();
 				next.rwcprevlock.lockWrite();
 				curr.rwcnextlock.lockWrite();
 				// Make sure they are still pointing to the ones they were supposed to point
@@ -68,29 +70,31 @@ public class WriterRW<T> extends Writer<T> {
 						curr.addAfter(e);
 						cursor.next();
 					}
-					next.rwcprevlock.lockWrite();
-					curr.rwcnextlock.lockWrite();
+					next.rwcprevlock.unlockWrite();
+					curr.rwcnextlock.unlockWrite();
 					break;
 				}
+				next.rwcprevlock.unlockWrite();
+				curr.rwcnextlock.unlockWrite();
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		} 
-		cursor.next();
+//		cursor.next();
 		return true;
 	}
 
 	@Override
 	public boolean delete() {
-		ElementRW<T> prev;
-		ElementRW<T> curr;
-		ElementRW<T> next;
+		ElementCRW<T> prev;
+		ElementCRW<T> curr;
+		ElementCRW<T> next;
 		
 		try {
 			while ( true ) {
-				prev = (ElementRW<T>) cursor.getprev();
-				next = (ElementRW<T>) cursor.getnext();
-				curr = (ElementRW<T>) cursor.curr();
+				prev = (ElementCRW<T>) cursor.getprev();
+				next = (ElementCRW<T>) cursor.getnext();
+				curr = (ElementCRW<T>) cursor.curr();
 				// Make sure they are still pointing to the ones they were supposed to point
 				// This messes the performance
 				if ( prev.nextlock.tryLock() &&

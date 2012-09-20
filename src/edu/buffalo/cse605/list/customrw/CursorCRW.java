@@ -7,9 +7,9 @@ import edu.buffalo.cse605.list.Cursor;
 import edu.buffalo.cse605.list.Element;
 import edu.buffalo.cse605.list.Writer;
 
-public class CursorRW<T> extends Cursor<T> {
+public class CursorCRW<T> extends Cursor<T> {
 	
-	public CursorRW(ElementRW<T> start) {
+	public CursorCRW(ElementCRW<T> start) {
 		super(start);
 		this.curr = start; 
 	}
@@ -49,6 +49,6 @@ public class CursorRW<T> extends Cursor<T> {
 	
 	@Override
 	public Writer<T> writer() {
-		return new WriterRW<T>(this);
+		return new WriterCRW<T>(this);
 	}
 }
