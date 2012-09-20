@@ -1,70 +1,70 @@
 package edu.buffalo.cse605.main;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import edu.buffalo.cse605.list.Cursor;
 import edu.buffalo.cse605.list.FDList;
-import edu.buffalo.cse605.list.coarse.CursorCoarse;
 import edu.buffalo.cse605.list.coarse.FDListCoarse;
-import edu.buffalo.cse605.list.fine.CursorFine;
 import edu.buffalo.cse605.list.fine.FDListFine;
 import edu.buffalo.cse605.list.rw.FDListRW;
-import edu.buffalo.cse605.list.customrw.CursorCRW;
 import edu.buffalo.cse605.list.customrw.FDListCRW;
 import edu.buffalo.cse605.test.insertLeft;
 import edu.buffalo.cse605.test.insertLeftCoarse;
 import edu.buffalo.cse605.test.insertRight;
 import edu.buffalo.cse605.test.insertRightCoarse;
-import edu.buffalo.cse605.test.readNext;
-import edu.buffalo.cse605.test.readPrev;
 
 public class Main {
 	public static void main(String[] args) {
-//		ExecutorService e = Executors.newFixedThreadPool(64);
-//		FDList<String> f = new FDList<String> ("hi");
-//		FDListCoarse<String> f = new FDListCoarse<String> ("hi");
-		FDListFine<String> f = new FDListFine<String> ("hi");
-//		FDListCRW<String> f = new FDListCRW<String> ("hi");
-//		FDListRW<String> f = new FDListRW<String> ("hi");
-		
-		Cursor<String> c;
-		Cursor<String> temp = f.reader( f.head() );
-		int m = 0, n = 0;
-		
+		// Constants
 		int mb = 1024*1024;
-        
-        //Getting the runtime reference from system
+		long ttime = 0; // total time
         Runtime runtime = Runtime.getRuntime();
 		
-		long ttime = 0;
-		int nt = 64;//Integer.parseInt(args[0]);
-		int it = 10;
+		String scheme = args[0]; // list scheme
+		int nt = Integer.parseInt(args[1]); // Threads
+		int it =  Integer.parseInt(args[2]); // iterations
+		int els =  Integer.parseInt(args[3])/nt; // elements / number of threads
+//		String test = args[4]; // testschemes
 		
-//		for ( int i = 0; i < 10000; i++ ) {
-//			c.writer().insertBefore(i+"");
-//		}
-//		c.prev();
+		FDList<String> f;
+		Cursor<String> c, temp;
+		long startTime, endTime, totalTime;
+		// Validation of elements inserted
+		int m = 0, n = 0;
+		
+		if (scheme.equals("fine")) {
+			f = new FDListFine<String> ("hi");
+		} else if (scheme.equals("coarse")) {
+			f = new FDListCoarse<String> ("hi");
+		} else if (scheme.equals("rw")) {
+			f = new FDListRW<String> ("hi");
+		} else if (scheme.equals("crw")) {
+			f = new FDListCRW<String> ("hi");
+		} else {
+			f = new FDList<String> ("hi");
+		}
+		
+		/* temp cursor on the head for validation */
+		temp = f.reader( f.head() );
 		
 //		new Thread(new readNext(f.reader( f.head() ))).start();
 //		new Thread(new readPrev(f.reader( f.head() ))).start();
 		
-		System.out.println("=========== No.of Threads => " + nt + " =========");
+		System.out.println("=========== Scheme => " + scheme + "; Threads => " + nt + "; Els => " + els + " =========");
+		
 		for (int i = 0; i < it; i++) {
-			long startTime = System.currentTimeMillis();
+			startTime = System.currentTimeMillis();
 			Thread[] threads = new Thread[nt];
 			for (int j = 0; j < nt ; j+=2) {
 				c = f.reader( f.head() );
-//				e.execute(new insertLeft(c, nt/2));
-//				e.execute(new insertRight(c, nt/2));
-				threads[j] = new Thread(new insertLeft(c, nt/2));
-				threads[j+1] = new Thread(new insertRight(c, nt/2));
-//				threads[j] = new Thread(new insertLeftCoarse(f, c, nt/2));
-//				threads[j+1] = new Thread(new insertRightCoarse(f, c, nt/2));
+				if ( scheme.equals("coarse") ) {
+					threads[j] = new Thread(new insertLeftCoarse(f, c, els));
+					threads[j+1] = new Thread(new insertRightCoarse(f, c, els));
+				} else {
+					threads[j] = new Thread(new insertLeft(c, els));
+					threads[j+1] = new Thread(new insertRight(c, els));
+				}
 				threads[j].start();
 				threads[j+1].start();
 			}
-			
 			for (int j = 0; j < nt; j++) {
 				try {
 					threads[j].join();
@@ -72,9 +72,8 @@ public class Main {
 					e.printStackTrace();
 				}
 			}
-
-			long endTime   = System.currentTimeMillis();
-			long totalTime = endTime - startTime;
+			endTime   = System.currentTimeMillis();
+			totalTime = endTime - startTime;
 			ttime += totalTime;
 		}
 
@@ -90,24 +89,13 @@ public class Main {
 			n++;
 			temp.prev();
 		}
-		System.out.println("Total List count => " + m + " => " + n + " => " + f.count);
 		
-         
-        System.out.println("##### Heap utilization statistics [MB] #####");
-         
-        //Print used memory
-        System.out.println("Used Memory:"
-            + (runtime.totalMemory() - runtime.freeMemory()) / mb);
- 
-        //Print free memory
-        System.out.println("Free Memory:"
-            + runtime.freeMemory() / mb);
-         
-        //Print total available memory
-        System.out.println("Total Memory:" + runtime.totalMemory() / mb);
- 
-        //Print Maximum available memory
-        System.out.println("Max Memory:" + runtime.maxMemory() / mb);
+		System.out.println("Total List count => " + m + " => " + n + " => " + f.count);
+        System.out.println("==== Heap utilization statistics [MB] ====");
+        System.out.println("Used Memory => " + (runtime.totalMemory() - runtime.freeMemory()) / mb);
+        System.out.println("Free Memory => " + runtime.freeMemory() / mb);
+        System.out.println("Total Memory => " + runtime.totalMemory() / mb);
+        System.out.println("Max Memory => " + runtime.maxMemory() / mb);
 
 //		System.out.println("current element pointed by cursor..." + c.curr().toString());
 //		

@@ -4,21 +4,21 @@ import edu.buffalo.cse605.list.Cursor;
 import edu.buffalo.cse605.list.FDList;
 
 public class insertRightCoarse extends Thread{
-     private Cursor<String> c;
+	 private Cursor<String> c;
      private FDList<String> f;
-     private int nt;
+     private int els;
      
      
-     public insertRightCoarse(FDList<String> f, Cursor<String> c, int nt){
-    	 this.nt = nt;
+     public insertRightCoarse(FDList<String> f, Cursor<String> c, int els){
+    	 this.els = els;
     	 this.f = f;
     	 this.c = c;
      }
      
-     @Override
+    @Override
 	public void run() {
     	 synchronized(f) {
-	    	 for(int j=0; j < 200000/nt; j++){
+	    	 for(int j=0; j < els; j++){
 	        	 c.writer().insertAfter("beautiful" + j);
 	         }
     	 }

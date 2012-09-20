@@ -1,9 +1,6 @@
 package edu.buffalo.cse605.list.customrw;
 
-import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
-
 import edu.buffalo.cse605.list.Writer;
-import edu.buffalo.cse605.lock.ReadWriteLock;
 
 public class WriterCRW<T> extends Writer<T> { 
  	
@@ -52,8 +49,6 @@ public class WriterCRW<T> extends Writer<T> {
 		ElementCRW<T> e = new ElementCRW<T>(val);
 		ElementCRW<T> next;
 		ElementCRW<T> curr;
-		WriteLock wnext;
-		WriteLock wcurr;
 		try {
 			while ( true ) {
 				next = (ElementCRW<T>) cursor.getnext();
@@ -95,43 +90,40 @@ public class WriterCRW<T> extends Writer<T> {
 				prev = (ElementCRW<T>) cursor.getprev();
 				next = (ElementCRW<T>) cursor.getnext();
 				curr = (ElementCRW<T>) cursor.curr();
+				prev.rwcnextlock.lockWrite();
+				curr.rwcprevlock.lockWrite();
+				curr.rwcnextlock.lockWrite();
+				next.rwcprevlock.lockWrite();
 				// Make sure they are still pointing to the ones they were supposed to point
 				// This messes the performance
-				if ( prev.nextlock.tryLock() &&
-					 curr.prevlock.tryLock() &&
-					 curr.nextlock.tryLock() &&
-					 next.prevlock.tryLock() &&
-					 prev.next() == curr && 
+				if ( prev.next() == curr && 
 					 curr.prev() == prev &&
 					 curr.next() == next &&
 					 next.prev() == curr ) {
 					if (cursor.curr() == null) { 
 						throw new Error("the list is empty");
-					} else if (cursor.getnext() == cursor.getprev() && cursor.getnext() == cursor.curr()) {
+					} else if ( next == prev && next == curr ) {
 						cursor.curr(null);
 					} else {
 						// 	Delete
-						cursor.curr().delete();
+						curr.delete();
 						// Move the cursor to previous
 						cursor.curr(prev);
 					}
-					prev.nextlock.unlock();
-					next.prevlock.unlock();
+					prev.rwcnextlock.unlockWrite();
+					curr.rwcprevlock.unlockWrite();
+					curr.rwcnextlock.unlockWrite();
+					next.rwcprevlock.unlockWrite();
 					break;
-				} else {
-					if ( prev.nextlock.isHeldByCurrentThread() ) {
-						prev.nextlock.unlock();
-					}
-					if ( next.prevlock.isHeldByCurrentThread() ) {
-						next.prevlock.unlock();
-					}
-					Thread.yield();
 				}
+				prev.rwcnextlock.unlockWrite();
+				curr.rwcprevlock.unlockWrite();
+				curr.rwcnextlock.unlockWrite();
+				next.rwcprevlock.unlockWrite();
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 		return true;
-	}
-	
+	}	
 }

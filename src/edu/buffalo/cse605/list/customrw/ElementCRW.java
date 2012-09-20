@@ -1,7 +1,5 @@
 package edu.buffalo.cse605.list.customrw;
 
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 import edu.buffalo.cse605.list.Element;
 import edu.buffalo.cse605.lock.ReadWriteLock;
 
