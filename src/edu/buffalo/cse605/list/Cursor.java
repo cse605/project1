@@ -3,17 +3,14 @@ package edu.buffalo.cse605.list;
 import edu.buffalo.cse605.list.iface.ICursor;
 
 public class Cursor<T> implements ICursor<T> {
-	private Element<T> curr;
-	private Writer<T> writer = new Writer<T>(this);
+	protected Element<T> curr;
 	
 	public FDList<T> list;
 	
-	public Cursor(Element<T> start, FDList<T> list) {
-		this.list = list;
+	public Cursor(Element<T> start) {
 		this.curr = start;
 	}
 	
-	// TODO: needs to be not exposed to public
 	public Element<T> curr(Element<T> curr) {
 		this.curr = curr;
 		return curr;
@@ -23,11 +20,6 @@ public class Cursor<T> implements ICursor<T> {
 	public Element<T> curr() {
 		return this.curr;
 	}
-
-	@Override
-	public void next() {
-		 this.curr = curr.next();
-	}
 	
 	public Element<T> getnext(){
 		return this.curr.next();
@@ -36,6 +28,12 @@ public class Cursor<T> implements ICursor<T> {
 	public Element<T> getprev(){
 		return this.curr().prev();
 	}
+	
+	@Override
+	public void next() {
+		 this.curr = curr.next();
+	}
+	
 	@Override
 	public void prev() {
 		this.curr = curr.prev();
@@ -43,7 +41,7 @@ public class Cursor<T> implements ICursor<T> {
 
 	@Override
 	public Writer<T> writer() {
-		return writer;
+		return new Writer<T>(this);
 	}
 
 }

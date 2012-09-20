@@ -3,7 +3,7 @@ package edu.buffalo.cse605.list.coarse;
 import edu.buffalo.cse605.list.Writer;
 import edu.buffalo.cse605.list.iface.IWriter;
 
-public class WriterCoarse<T> extends Writer<T> implements IWriter<T> {	
+public class WriterCoarse<T> extends Writer<T> {	
 	public WriterCoarse(CursorCoarse<T> cursor) {
 		super(cursor); 
 	}

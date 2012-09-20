@@ -1,27 +1,33 @@
-package edu.buffalo.cse605.list.fine;
+package edu.buffalo.cse605.list.rw;
+
+import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 import edu.buffalo.cse605.list.Writer;
 
-public class WriterFine<T> extends Writer<T> { 
+public class WriterRW<T> extends Writer<T> { 
  	
-	public WriterFine(CursorFine<T> cursor) {
+	public WriterRW(CursorRW<T> cursor) {
 		super(cursor);
 		this.cursor = cursor;
 	}
 
 	@Override
 	public boolean insertBefore(T val) {
-		ElementFine<T> e = new ElementFine<T>(val);
-		ElementFine<T> prev;
-		ElementFine<T> curr;
+		ElementRW<T> e = new ElementRW<T>(val);
+		ElementRW<T> prev;
+		ElementRW<T> curr;
+		WriteLock wprev;
+		WriteLock wcurr;
 		try {
 			while ( true ) {
-				prev = (ElementFine<T>) cursor.getprev();
-				curr = (ElementFine<T>) cursor.curr();
+				prev = (ElementRW<T>) cursor.getprev();
+				curr = (ElementRW<T>) cursor.curr();
+				wprev = prev.rwnextlock.writeLock();
+				wcurr = prev.rwprevlock.writeLock();
 				// Make sure they are still pointing to the ones they were supposed to point
 				// This messes the performance
-				if ( prev.nextlock.tryLock() &&
-					 curr.prevlock.tryLock() &&
+				if ( wprev.tryLock() &&
+					 wcurr.tryLock() &&
 					 prev.next() == curr && 
 					 curr.prev() == prev ) {
 					if ( cursor.curr() == null ) {
@@ -29,15 +35,16 @@ public class WriterFine<T> extends Writer<T> {
 					} else {
 						curr.addBefore(e);
 					}
-					curr.prevlock.unlock();
-					prev.nextlock.unlock();
+					wcurr.unlock();
+					wprev.unlock();
+					cursor.prev();
 					break;
 				} else {
-					if ( curr.prevlock.isHeldByCurrentThread() ) {
-						curr.prevlock.unlock();
+					if ( wcurr.isHeldByCurrentThread() ) {
+						wcurr.unlock();
 					}
-					if ( prev.nextlock.isHeldByCurrentThread() ) {
-						prev.nextlock.unlock();
+					if ( wprev.isHeldByCurrentThread() ) {
+						wprev.unlock();
 					}
 					Thread.yield();
 				}
@@ -46,41 +53,44 @@ public class WriterFine<T> extends Writer<T> {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		cursor.prev();
-		this.cursor.list.count.getAndIncrement();
 		return true;
 	}
 
 
 	@Override
 	public boolean insertAfter(T val) {
-		ElementFine<T> e = new ElementFine<T>(val);
-		ElementFine<T> next;
-		ElementFine<T> curr;
+		ElementRW<T> e = new ElementRW<T>(val);
+		ElementRW<T> next;
+		ElementRW<T> curr;
+		WriteLock wnext;
+		WriteLock wcurr;
 		try {
 			while ( true ) {
-				next = (ElementFine<T>) cursor.getnext();
-				curr = (ElementFine<T>) cursor.curr();
+				next = (ElementRW<T>) cursor.getnext();
+				curr = (ElementRW<T>) cursor.curr();
+				wnext = next.rwprevlock.writeLock();
+				wcurr = curr.rwnextlock.writeLock();
 				// Make sure they are still pointing to the ones they were supposed to point
 				// This messes the performance
-				if ( next.prevlock.tryLock() &&
-					 curr.nextlock.tryLock() &&
+				if ( wnext.tryLock() &&
+					 wcurr.tryLock() &&
 					 next.prev() == cursor.curr() && 
 					 curr.next() == next ) {
 					if ( cursor.curr() == null ) {
 						 cursor.curr(e);
 					} else {
 						curr.addAfter(e);
+						cursor.next();
 					}
-					next.prevlock.unlock();
-					curr.nextlock.unlock();
+					wnext.unlock();
+					wcurr.unlock();
 					break;
 				} else {
-					if ( curr.nextlock.isHeldByCurrentThread() ) {
-						curr.nextlock.unlock();
+					if ( wcurr.isHeldByCurrentThread() ) {
+						wcurr.unlock();
 					}
-					if ( next.prevlock.isHeldByCurrentThread() ) {
-						next.prevlock.unlock();
+					if ( wnext.isHeldByCurrentThread() ) {
+						wnext.unlock();
 					}
 					Thread.yield();
 				}
@@ -89,21 +99,20 @@ public class WriterFine<T> extends Writer<T> {
 			e1.printStackTrace();
 		} 
 		cursor.next();
-		this.cursor.list.count.getAndIncrement();
 		return true;
 	}
 
 	@Override
 	public boolean delete() {
-		ElementFine<T> prev;
-		ElementFine<T> curr;
-		ElementFine<T> next;
+		ElementRW<T> prev;
+		ElementRW<T> curr;
+		ElementRW<T> next;
 		
 		try {
 			while ( true ) {
-				prev = (ElementFine<T>) cursor.getprev();
-				next = (ElementFine<T>) cursor.getnext();
-				curr = (ElementFine<T>) cursor.curr();
+				prev = (ElementRW<T>) cursor.getprev();
+				next = (ElementRW<T>) cursor.getnext();
+				curr = (ElementRW<T>) cursor.curr();
 				// Make sure they are still pointing to the ones they were supposed to point
 				// This messes the performance
 				if ( prev.nextlock.tryLock() &&

@@ -1,20 +1,22 @@
 package edu.buffalo.cse605.list.fine;
 
+import edu.buffalo.cse605.list.FDList;
 
-public class FDListFine<T> {
-	private ElementFine<T> head;
-	private CursorFine<T> cursor;
+
+public class FDListFine<T> extends FDList<T> {
 	
 	public FDListFine(T val) {
-		this.head = new ElementFine<T>(val, null, null);
-	}
-
-	public ElementFine<T> head() {
-		return this.head;
+		super(val);
+		this.head = new ElementFine<T>(val);
 	}
 	
+	@Override
+	public ElementFine<T> head() {
+		return (ElementFine<T>) this.head;
+	}
+	
+	
 	public CursorFine<T> reader(ElementFine<T> start) {
-		cursor = new CursorFine<T>(start);
-		return this.cursor;
+		return new CursorFine<T>(start, this);
 	}
 }

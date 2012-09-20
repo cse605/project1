@@ -1,17 +1,16 @@
 package edu.buffalo.cse605.test;
 
-import edu.buffalo.cse605.list.fine.CursorFine;
-import edu.buffalo.cse605.list.fine.FDListFine;
+import edu.buffalo.cse605.list.Cursor;
 
 public class readPrev  extends Thread{
-     public CursorFine<String> c;
-     int i;
-     public readPrev(FDListFine<String> f, int i){
-    	 this.i = i;
-    	 c = f.reader(f.head());
-     }
+	public Cursor<String> c;
+    
+    public readPrev(Cursor<String> c){
+   	 this.c = c;
+    }
      
-     public void run(){
+     @Override
+	public void run(){
     	 while(c.curr() != null) {
     		 c.prev();
     	 }
