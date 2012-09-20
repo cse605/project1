@@ -10,26 +10,35 @@ public class WriterFine<T> {
 
 	public boolean insertBefore(T val) {
 		ElementFine<T> e = new ElementFine<T>(val);
-		ElementFine<T> prev = cursor.getprev();
-		ElementFine<T> curr = cursor.curr();
+		ElementFine<T> prev;
+		ElementFine<T> curr;
 		try {
-			while ( prev.nextlock.tryLock() &&
-					curr.prevlock.tryLock() ) {
+			while ( true ) {
+				prev = cursor.getprev();
+				curr = cursor.curr();
 				// Make sure they are still pointing to the ones they were supposed to point
 				// This messes the performance
-				if ( prev.next() == curr && 
-					curr.prev() == prev ) {
+				if ( prev.nextlock.tryLock() &&
+					 curr.prevlock.tryLock() &&
+					 prev.next() == curr && 
+					 curr.prev() == prev ) {
 					if ( cursor.curr() == null ) {
 						 cursor.curr(e);
 					} else {
 						curr.addBefore(e);
-						cursor.prev();
 					}
-					cursor.getnext().prevlock.unlock();
+					curr.prevlock.unlock();
 					prev.nextlock.unlock();
+					cursor.prev();
 					break;
 				} else {
-					throw new Exception("inconsitent");
+					if ( curr.prevlock.isHeldByCurrentThread() ) {
+						curr.prevlock.unlock();
+					}
+					if ( prev.nextlock.isHeldByCurrentThread() ) {
+						prev.nextlock.unlock();
+					}
+					Thread.yield();
 				}
 			}
 			
@@ -42,14 +51,17 @@ public class WriterFine<T> {
 
 	public boolean insertAfter(T val) {
 		ElementFine<T> e = new ElementFine<T>(val);
-		ElementFine<T> next = cursor.getnext();
-		ElementFine<T> curr = cursor.curr();
+		ElementFine<T> next;
+		ElementFine<T> curr;
 		try {
-			while ( next.prevlock.tryLock() &&
-					curr.nextlock.tryLock() ) {
+			while ( true ) {
+				next = cursor.getnext();
+				curr = cursor.curr();
 				// Make sure they are still pointing to the ones they were supposed to point
 				// This messes the performance
-				if ( next.prev() == cursor.curr() && 
+				if ( next.prevlock.tryLock() &&
+					 curr.nextlock.tryLock() &&
+					 next.prev() == cursor.curr() && 
 					 curr.next() == next ) {
 					if ( cursor.curr() == null ) {
 						 cursor.curr(e);
@@ -57,35 +69,46 @@ public class WriterFine<T> {
 						curr.addAfter(e);
 						cursor.next();
 					}
-					cursor.getprev().nextlock.unlock();
 					next.prevlock.unlock();
+					curr.nextlock.unlock();
 					break;
 				} else {
-					throw new Exception("inconsitent");
+					if ( curr.nextlock.isHeldByCurrentThread() ) {
+						curr.nextlock.unlock();
+					}
+					if ( next.prevlock.isHeldByCurrentThread() ) {
+						next.prevlock.unlock();
+					}
+					Thread.yield();
 				}
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		} 
+		cursor.next();
 		return true;
 	}
 
 	public boolean delete() {
-		ElementFine<T> prev = cursor.getprev();
-		ElementFine<T> curr = cursor.curr();
-		ElementFine<T> next = cursor.getnext();
+		ElementFine<T> prev;
+		ElementFine<T> curr;
+		ElementFine<T> next;
 		
 		try {
-			while ( prev.nextlock.tryLock() &&
-					curr.prevlock.tryLock() &&
-					curr.nextlock.tryLock() &&
-					next.prevlock.tryLock() ) {
+			while ( true ) {
+				prev = cursor.getprev();
+				next = cursor.getnext();
+				curr = cursor.curr();
 				// Make sure they are still pointing to the ones they were supposed to point
 				// This messes the performance
-				if ( prev.next() == curr && 
-					curr.prev() == prev &&
-					curr.next() == next &&
-					next.prev() == curr ) {
+				if ( prev.nextlock.tryLock() &&
+					 curr.prevlock.tryLock() &&
+					 curr.nextlock.tryLock() &&
+					 next.prevlock.tryLock() &&
+					 prev.next() == curr && 
+					 curr.prev() == prev &&
+					 curr.next() == next &&
+					 next.prev() == curr ) {
 					if (cursor.curr() == null) { 
 						throw new Error("the list is empty");
 					} else if (cursor.getnext() == cursor.getprev() && cursor.getnext() == cursor.curr()) {
@@ -100,7 +123,13 @@ public class WriterFine<T> {
 					next.prevlock.unlock();
 					break;
 				} else {
-					throw new Exception("inconsitent");
+					if ( prev.nextlock.isHeldByCurrentThread() ) {
+						prev.nextlock.unlock();
+					}
+					if ( next.prevlock.isHeldByCurrentThread() ) {
+						next.prevlock.unlock();
+					}
+					Thread.yield();
 				}
 			}
 		} catch (Exception e1) {

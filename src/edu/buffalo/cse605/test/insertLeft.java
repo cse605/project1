@@ -11,13 +11,9 @@ public class insertLeft  extends Thread{
     	 c = f.reader(f.head());
      }
      
-     public void run(){
-//    	 long startTime = System.currentTimeMillis();
+     public void run() {
     	 for(int j=0; j < 100000/i; j++){
         	 c.writer().insertBefore("beautiful" + j);
          }
-//         long endTime   = System.currentTimeMillis();
-//         long totalTime = endTime - startTime;
-//         System.out.println("Thread-" + Thread.currentThread().getId() + " running time => " + totalTime);
      }
 }

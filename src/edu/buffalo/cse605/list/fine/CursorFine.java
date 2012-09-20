@@ -25,7 +25,20 @@ public class CursorFine<T>  {
 
 	
 	public void next() {
-		 this.curr = curr.next();
+		ElementFine<T> curr;
+		while (true) {
+			curr = this.curr;
+			if ( this.curr.nextlock.tryLock() ) {
+				this.curr = curr.next();
+				curr.nextlock.unlock();
+				break;
+			} else {
+				if ( curr.nextlock.isLocked() && curr.nextlock.isHeldByCurrentThread() ) {
+					curr.nextlock.unlock();
+				}
+				Thread.yield();
+			}
+		}
 	}
     
 	public ElementFine<T> getnext(){
@@ -37,7 +50,20 @@ public class CursorFine<T>  {
 	}
 
 	public void prev() {
-		this.curr = curr.prev();
+		ElementFine<T> curr;
+		while (true) {
+			curr = this.curr;
+			if ( this.curr.prevlock.tryLock() ) {
+				this.curr = curr.prev();
+				curr.prevlock.unlock();
+				break;
+			} else {
+				if ( curr.prevlock.isLocked() && curr.prevlock.isHeldByCurrentThread() ) {
+					curr.prevlock.unlock();
+				}
+				Thread.yield();
+			}
+		}
 	}
 
 	

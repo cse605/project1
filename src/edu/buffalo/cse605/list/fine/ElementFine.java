@@ -6,8 +6,8 @@ import edu.buffalo.cse605.list.Element;
 
 
 public class ElementFine<T> extends Element<T> {
-    public final Lock nextlock = new ReentrantLock();
-    public final Lock prevlock = new ReentrantLock();
+    public final ReentrantLock nextlock = new ReentrantLock();
+    public final ReentrantLock prevlock = new ReentrantLock();
     
     // Constructor
     public ElementFine(T val) {

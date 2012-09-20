@@ -6,8 +6,7 @@ import edu.buffalo.cse605.list.fine.FDListFine;
 public class readPrev  extends Thread{
      public CursorFine<String> c;
      int i;
-     public readPrev(FDListFine<String> f, int i){
-    	 this.i = i;
+     public readPrev(FDListFine<String> f){
     	 c = f.reader(f.head());
      }
      

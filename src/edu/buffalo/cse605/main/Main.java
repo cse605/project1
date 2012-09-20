@@ -12,22 +12,22 @@ public class Main {
 		FDListFine<String> f;		
 		f = new FDListFine<String> ("hi");
 		long ttime = 0;
-	
-//		FDListCoarse<String>  = new FDListCoarse<String> ("hi");
-		int nt = 32;//Integer.parseInt(args[0]);
-//		CursorFine<String> c;
-//		c = f.reader( f.head() );
-//		
+		
+		CursorFine<String> c;
+		c = f.reader( f.head() );
+		int nt = 8;//Integer.parseInt(args[0]);
+		int it = 1;
+		
 //		for ( int i = 0; i < 10000; i++ ) {
 //			c.writer().insertBefore(i+"");
 //		}
 //		c.prev();
 		
-		new Thread(new readNext(f, 16));
-		new Thread(new readPrev(f, 16));
+		new Thread(new readNext(f));
+		new Thread(new readPrev(f));
 		
-		System.out.println("=========== No.of Threads => " + nt + "=========");
-		for (int i = 0; i < 10; i++) {
+		System.out.println("=========== No.of Threads => " + nt + " =========");
+		for (int i = 0; i < it; i++) {
 			long startTime = System.currentTimeMillis();
 			Thread[] threads = new Thread[nt];
 			for (int j = 0; j < nt ; j+=2) {
@@ -49,10 +49,10 @@ public class Main {
 			long totalTime = endTime - startTime;
 			ttime += totalTime;
 		}
-		System.out.println("Total running time => " + ttime/10);
+		System.out.println("Total running time => " + ttime/it);
 
 		
-//		System.out.println("count => " + f.count.get());
+
 //		System.out.println("current element pointed by cursor..." + c.curr().toString());
 //		
 //		if (f.head() == c.curr()) {
