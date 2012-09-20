@@ -1,6 +1,7 @@
 package edu.buffalo.cse605.list.rw;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 import edu.buffalo.cse605.list.Cursor;
 import edu.buffalo.cse605.list.Element;
@@ -16,10 +17,10 @@ public class CursorRW<T> extends Cursor<T> {
 	@Override
 	public void next() {
 		Element<T> curr;
-		ReadLock lock;
+		WriteLock lock;
 		while (true) {
 			curr = this.curr;
-			lock = curr.rwnextlock.readLock();
+			lock = curr.rwnextlock.writeLock();
 			if ( lock.tryLock() ) {
 				this.curr = curr.next();
 				lock.unlock();
@@ -33,10 +34,10 @@ public class CursorRW<T> extends Cursor<T> {
 	@Override
 	public void prev() {
 		Element<T> curr;
-		ReadLock lock;
+		WriteLock lock;
 		while (true) {
 			curr = this.curr;
-			lock = curr.rwprevlock.readLock();
+			lock = curr.rwprevlock.writeLock();
 			if ( lock.tryLock() ) {
 				this.curr = curr.prev();
 				lock.unlock();

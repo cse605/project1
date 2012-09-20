@@ -6,9 +6,10 @@ import edu.buffalo.cse605.list.Writer;
 
 public class CursorFine<T> extends Cursor<T> {
 	
-	public CursorFine(ElementFine<T> start) {
+	public CursorFine(ElementFine<T> start, FDListFine<T> list) {
 		super(start);
 		this.curr = start; 
+		this.list = list;
 	}
 	
 	@Override
@@ -16,7 +17,7 @@ public class CursorFine<T> extends Cursor<T> {
 		Element<T> curr;
 		while (true) {
 			curr = this.curr;
-			if ( this.curr.nextlock.tryLock() ) {
+			if ( curr.nextlock.tryLock() ) {
 				this.curr = curr.next();
 				curr.nextlock.unlock();
 				break;
@@ -31,7 +32,7 @@ public class CursorFine<T> extends Cursor<T> {
 		Element<T> curr;
 		while (true) {
 			curr = this.curr;
-			if ( this.curr.prevlock.tryLock() ) {
+			if ( curr.prevlock.tryLock() ) {
 				this.curr = curr.prev();
 				curr.prevlock.unlock();
 				break;

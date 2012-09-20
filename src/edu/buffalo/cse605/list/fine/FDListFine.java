@@ -17,6 +17,6 @@ public class FDListFine<T> extends FDList<T> {
 	
 	
 	public CursorFine<T> reader(ElementFine<T> start) {
-		return new CursorFine<T>(start);
+		return new CursorFine<T>(start, this);
 	}
 }

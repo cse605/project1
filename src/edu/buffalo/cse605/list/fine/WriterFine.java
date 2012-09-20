@@ -31,7 +31,6 @@ public class WriterFine<T> extends Writer<T> {
 					}
 					curr.prevlock.unlock();
 					prev.nextlock.unlock();
-					cursor.prev();
 					break;
 				} else {
 					if ( curr.prevlock.isHeldByCurrentThread() ) {
@@ -47,6 +46,8 @@ public class WriterFine<T> extends Writer<T> {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+		cursor.prev();
+		this.cursor.list.count.getAndIncrement();
 		return true;
 	}
 
@@ -70,7 +71,6 @@ public class WriterFine<T> extends Writer<T> {
 						 cursor.curr(e);
 					} else {
 						curr.addAfter(e);
-						cursor.next();
 					}
 					next.prevlock.unlock();
 					curr.nextlock.unlock();
@@ -89,6 +89,7 @@ public class WriterFine<T> extends Writer<T> {
 			e1.printStackTrace();
 		} 
 		cursor.next();
+		this.cursor.list.count.getAndIncrement();
 		return true;
 	}
 

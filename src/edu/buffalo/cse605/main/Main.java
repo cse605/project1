@@ -1,26 +1,33 @@
 package edu.buffalo.cse605.main;
 
+import edu.buffalo.cse605.list.Cursor;
+import edu.buffalo.cse605.list.FDList;
+import edu.buffalo.cse605.list.coarse.CursorCoarse;
+import edu.buffalo.cse605.list.coarse.FDListCoarse;
 import edu.buffalo.cse605.list.fine.CursorFine;
 import edu.buffalo.cse605.list.fine.FDListFine;
 import edu.buffalo.cse605.list.rw.CursorRW;
 import edu.buffalo.cse605.list.rw.FDListRW;
 import edu.buffalo.cse605.test.insertLeft;
+import edu.buffalo.cse605.test.insertLeftCoarse;
 import edu.buffalo.cse605.test.insertRight;
+import edu.buffalo.cse605.test.insertRightCoarse;
 import edu.buffalo.cse605.test.readNext;
 import edu.buffalo.cse605.test.readPrev;
 
 public class Main {
 	public static void main(String[] args) {
-		FDListFine<String> f;		
-		f = new FDListFine<String> ("hi");
-		CursorFine<String> c = f.reader( f.head() );
+//		FDList<String> f = new FDList<String> ("hi");
+//		FDListCoarse<String> f = new FDListCoarse<String> ("hi");
+		FDListFine<String> f = new FDListFine<String> ("hi");
+//		FDListRW<String> f = new FDListRW<String> ("hi");
 		
-		FDListRW<String> frw;		
-		frw = new FDListRW<String> ("hi");
-		CursorRW<String> crw = frw.reader( frw.head() );
+		Cursor<String> c;
+		Cursor<String> temp = f.reader( f.head() );
+		int m = 0, n = 0;
 		
 		long ttime = 0;
-		int nt = 8;//Integer.parseInt(args[0]);
+		int nt = 2;//Integer.parseInt(args[0]);
 		int it = 1;
 		
 //		for ( int i = 0; i < 10000; i++ ) {
@@ -28,16 +35,19 @@ public class Main {
 //		}
 //		c.prev();
 		
-		new Thread(new readNext(f));
-		new Thread(new readPrev(f));
+		new Thread(new readNext(f.reader( f.head() )));
+		new Thread(new readPrev(f.reader( f.head() )));
 		
 		System.out.println("=========== No.of Threads => " + nt + " =========");
 		for (int i = 0; i < it; i++) {
 			long startTime = System.currentTimeMillis();
 			Thread[] threads = new Thread[nt];
 			for (int j = 0; j < nt ; j+=2) {
-				threads[j] = new Thread(new insertLeft(f, nt/2));
-				threads[j+1] = new Thread(new insertRight(f, nt/2));
+				c = f.reader( f.head() );
+				threads[j] = new Thread(new insertLeft(c, nt/2));
+				threads[j+1] = new Thread(new insertRight(c, nt/2));
+//				threads[j] = new Thread(new insertLeftCoarse(f, c, nt/2));
+//				threads[j+1] = new Thread(new insertRightCoarse(f, c, nt/2));
 				threads[j].start();
 				threads[j+1].start();
 			}
@@ -54,9 +64,20 @@ public class Main {
 			long totalTime = endTime - startTime;
 			ttime += totalTime;
 		}
-		System.out.println("Total running time => " + ttime/it);
 
+		System.out.println("Total running time => " + ttime/it);
 		
+		temp.next();
+		while(temp.curr() != f.head()) {
+			m++;
+			temp.next();
+		}
+		temp.prev();
+		while(temp.curr() != f.head()) {
+			n++;
+			temp.prev();
+		}
+		System.out.println("Total List count => " + m + " => " + n + " => " + f.count);
 
 //		System.out.println("current element pointed by cursor..." + c.curr().toString());
 //		

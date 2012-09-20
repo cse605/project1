@@ -1,23 +1,23 @@
 package edu.buffalo.cse605.test;
 
 import edu.buffalo.cse605.list.Cursor;
-import edu.buffalo.cse605.list.FDList;
-import edu.buffalo.cse605.list.fine.CursorFine;
-import edu.buffalo.cse605.list.fine.FDListFine;
-import edu.buffalo.cse605.list.rw.CursorRW;
-import edu.buffalo.cse605.list.rw.FDListRW;
 
 public class insertRight  extends Thread{
-     public CursorFine<String> c;
-     int i;
-     public insertRight(FDListFine<String> f, int i){
-    	 this.i = i;
-    	 c = f.reader(f.head());
-     }
+	private Cursor<String> c;
+    private int nt;
+    
+    public insertRight(int nt) {
+   	 this.nt = nt;
+    }
+    
+    public insertRight(Cursor<String> c, int nt){
+   	 this(nt);
+   	 this.c = c;
+    }
      
      @Override
 	public void run() {
-    	 for(int j=0; j < 100000/i; j++){
+    	 for(int j=0; j < 200000/nt; j++){
         	 c.writer().insertAfter("beautiful" + j);
          }
      }
