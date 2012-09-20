@@ -13,8 +13,7 @@ public class Main {
 		f = new FDListFine<String> ("hi");
 		long ttime = 0;
 		
-		CursorFine<String> c;
-		c = f.reader( f.head() );
+		CursorFine<String> c = f.reader( f.head() );
 		int nt = 8;//Integer.parseInt(args[0]);
 		int it = 1;
 		

@@ -3,7 +3,7 @@ package edu.buffalo.cse605.list;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class FDList<T> {
-	private Element<T> head;
+	protected Element<T> head;
 	public AtomicInteger count = new AtomicInteger(0);
 	
 	public FDList(T val) {
@@ -15,6 +15,6 @@ public class FDList<T> {
 	}
 	
 	public Cursor<T> reader(Element<T> start) {
-		return new Cursor<T>(start, this);
+		return new Cursor<T>(start);
 	}
 }

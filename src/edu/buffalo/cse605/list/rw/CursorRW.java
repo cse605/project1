@@ -1,12 +1,12 @@
-package edu.buffalo.cse605.list.fine;
+package edu.buffalo.cse605.list.rw;
 
 import edu.buffalo.cse605.list.Cursor;
 import edu.buffalo.cse605.list.Element;
 import edu.buffalo.cse605.list.Writer;
 
-public class CursorFine<T> extends Cursor<T> {
+public class CursorRW<T> extends Cursor<T> {
 	
-	public CursorFine(ElementFine<T> start) {
+	public CursorRW(ElementRW<T> start) {
 		super(start);
 		this.curr = start; 
 	}
@@ -50,6 +50,6 @@ public class CursorFine<T> extends Cursor<T> {
 	
 	@Override
 	public Writer<T> writer() {
-		return new WriterFine<T>(this);
+		return new WriterRW<T>(this);
 	}
 }

@@ -9,7 +9,7 @@ public class CursorCoarse<T> extends Cursor<T> implements ICursor<T> {
 	private WriterCoarse<T> writer = new WriterCoarse<T>(this);
 	
 	public CursorCoarse(Element<T> start, FDList<T> list) {
-		super(start, list);
+		super(start);
 	}
 	
 	@Override

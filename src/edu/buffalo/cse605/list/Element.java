@@ -1,11 +1,16 @@
 package edu.buffalo.cse605.list;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 import edu.buffalo.cse605.list.iface.IElement;
 
 public class Element<T> implements IElement<T> {
     private T val;
     protected Element<T> next;
 	protected Element<T> prev;
+	// Locks for Fine Grained
+	public ReentrantLock nextlock;
+	public ReentrantLock prevlock;
     
     // Constructor
     public Element(T val) {
@@ -92,7 +97,8 @@ public class Element<T> implements IElement<T> {
     }
     
     // Helper
-    public String toString() {
+    @Override
+	public String toString() {
     	return "v:" + this.val + ",prev:" + this.prev.val + ",next:" + this.next.val;
     }
 

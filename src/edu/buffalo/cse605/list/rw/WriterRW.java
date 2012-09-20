@@ -1,23 +1,23 @@
-package edu.buffalo.cse605.list.fine;
+package edu.buffalo.cse605.list.rw;
 
 import edu.buffalo.cse605.list.Writer;
 
-public class WriterFine<T> extends Writer<T> { 
+public class WriterRW<T> extends Writer<T> { 
  	
-	public WriterFine(CursorFine<T> cursor) {
+	public WriterRW(CursorRW<T> cursor) {
 		super(cursor);
 		this.cursor = cursor;
 	}
 
 	@Override
 	public boolean insertBefore(T val) {
-		ElementFine<T> e = new ElementFine<T>(val);
-		ElementFine<T> prev;
-		ElementFine<T> curr;
+		ElementRW<T> e = new ElementRW<T>(val);
+		ElementRW<T> prev;
+		ElementRW<T> curr;
 		try {
 			while ( true ) {
-				prev = (ElementFine<T>) cursor.getprev();
-				curr = (ElementFine<T>) cursor.curr();
+				prev = (ElementRW<T>) cursor.getprev();
+				curr = (ElementRW<T>) cursor.curr();
 				// Make sure they are still pointing to the ones they were supposed to point
 				// This messes the performance
 				if ( prev.nextlock.tryLock() &&
@@ -53,13 +53,13 @@ public class WriterFine<T> extends Writer<T> {
 
 	@Override
 	public boolean insertAfter(T val) {
-		ElementFine<T> e = new ElementFine<T>(val);
-		ElementFine<T> next;
-		ElementFine<T> curr;
+		ElementRW<T> e = new ElementRW<T>(val);
+		ElementRW<T> next;
+		ElementRW<T> curr;
 		try {
 			while ( true ) {
-				next = (ElementFine<T>) cursor.getnext();
-				curr = (ElementFine<T>) cursor.curr();
+				next = (ElementRW<T>) cursor.getnext();
+				curr = (ElementRW<T>) cursor.curr();
 				// Make sure they are still pointing to the ones they were supposed to point
 				// This messes the performance
 				if ( next.prevlock.tryLock() &&
@@ -94,15 +94,15 @@ public class WriterFine<T> extends Writer<T> {
 
 	@Override
 	public boolean delete() {
-		ElementFine<T> prev;
-		ElementFine<T> curr;
-		ElementFine<T> next;
+		ElementRW<T> prev;
+		ElementRW<T> curr;
+		ElementRW<T> next;
 		
 		try {
 			while ( true ) {
-				prev = (ElementFine<T>) cursor.getprev();
-				next = (ElementFine<T>) cursor.getnext();
-				curr = (ElementFine<T>) cursor.curr();
+				prev = (ElementRW<T>) cursor.getprev();
+				next = (ElementRW<T>) cursor.getnext();
+				curr = (ElementRW<T>) cursor.curr();
 				// Make sure they are still pointing to the ones they were supposed to point
 				// This messes the performance
 				if ( prev.nextlock.tryLock() &&

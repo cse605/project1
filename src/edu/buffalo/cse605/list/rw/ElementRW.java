@@ -1,12 +1,12 @@
-package edu.buffalo.cse605.list.fine;
+package edu.buffalo.cse605.list.rw;
 
 import java.util.concurrent.locks.ReentrantLock;
 
 import edu.buffalo.cse605.list.Element;
 
-public class ElementFine<T> extends Element<T> {
+public class ElementRW<T> extends Element<T> {
 
-	public ElementFine(T val) {
+	public ElementRW(T val) {
 		super(val);
 		this.nextlock = new ReentrantLock();
 		this.prevlock = new ReentrantLock();

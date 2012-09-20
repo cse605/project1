@@ -11,7 +11,8 @@ public class insertLeft  extends Thread{
     	 c = f.reader(f.head());
      }
      
-     public void run() {
+     @Override
+	public void run() {
     	 for(int j=0; j < 100000/i; j++){
         	 c.writer().insertBefore("beautiful" + j);
          }

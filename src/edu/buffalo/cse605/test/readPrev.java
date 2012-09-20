@@ -10,7 +10,8 @@ public class readPrev  extends Thread{
     	 c = f.reader(f.head());
      }
      
-     public void run(){
+     @Override
+	public void run(){
     	 while(c.curr() != null) {
     		 c.prev();
     	 }
