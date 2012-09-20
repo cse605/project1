@@ -1,5 +1,6 @@
 package edu.buffalo.cse605.list.rw;
 
+import edu.buffalo.cse605.list.Element;
 import edu.buffalo.cse605.list.FDList;
 
 
@@ -15,8 +16,8 @@ public class FDListRW<T> extends FDList<T> {
 		return (ElementRW<T>) this.head;
 	}
 	
-	
-	public CursorRW<T> reader(ElementRW<T> start) {
-		return new CursorRW<T>(start, this);
+	@Override
+	public CursorRW<T> reader(Element<T> start) {
+		return new CursorRW<T>((ElementRW<T>) start, this);
 	}
 }

@@ -39,6 +39,7 @@ public class Main {
 		} else if (scheme.equals("crw")) {
 			f = new FDListCRW<String> ("hi");
 		} else {
+			System.out.println("testing...");
 			f = new FDList<String> ("hi");
 		}
 		

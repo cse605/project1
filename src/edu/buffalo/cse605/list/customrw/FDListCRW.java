@@ -1,10 +1,11 @@
 package edu.buffalo.cse605.list.customrw;
 
+import edu.buffalo.cse605.list.Element;
 import edu.buffalo.cse605.list.FDList;
 
 
 public class FDListCRW<T> extends FDList<T> {
-	
+
 	public FDListCRW(T val) {
 		super(val);
 		this.head = new ElementCRW<T>(val);
@@ -15,8 +16,8 @@ public class FDListCRW<T> extends FDList<T> {
 		return (ElementCRW<T>) this.head;
 	}
 	
-	
-	public CursorCRW<T> reader(ElementCRW<T> start) {
-		return new CursorCRW<T>(start);
+	@Override
+	public CursorCRW<T> reader(Element<T> start) {
+		return new CursorCRW<T>((ElementCRW <T>) start);
 	}
 }
