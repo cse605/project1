@@ -33,7 +33,7 @@ public class CursorFine<T>  {
 				curr.nextlock.unlock();
 				break;
 			} else {
-				if ( curr.nextlock.isLocked() && curr.nextlock.isHeldByCurrentThread() ) {
+				if ( curr.nextlock.isHeldByCurrentThread() ) {
 					curr.nextlock.unlock();
 				}
 				Thread.yield();
@@ -58,7 +58,7 @@ public class CursorFine<T>  {
 				curr.prevlock.unlock();
 				break;
 			} else {
-				if ( curr.prevlock.isLocked() && curr.prevlock.isHeldByCurrentThread() ) {
+				if ( curr.prevlock.isHeldByCurrentThread() ) {
 					curr.prevlock.unlock();
 				}
 				Thread.yield();
