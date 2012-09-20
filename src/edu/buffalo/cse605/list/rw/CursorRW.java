@@ -17,10 +17,10 @@ public class CursorRW<T> extends Cursor<T> {
 	@Override
 	public void next() {
 		Element<T> curr;
-		WriteLock lock;
+		ReadLock lock;
 		while (true) {
 			curr = this.curr;
-			lock = curr.rwnextlock.writeLock();
+			lock = curr.rwnextlock.readLock();
 			if ( lock.tryLock() ) {
 				this.curr = curr.next();
 				lock.unlock();
@@ -34,10 +34,10 @@ public class CursorRW<T> extends Cursor<T> {
 	@Override
 	public void prev() {
 		Element<T> curr;
-		WriteLock lock;
+		ReadLock lock;
 		while (true) {
 			curr = this.curr;
-			lock = curr.rwprevlock.writeLock();
+			lock = curr.rwprevlock.readLock();
 			if ( lock.tryLock() ) {
 				this.curr = curr.prev();
 				lock.unlock();

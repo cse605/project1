@@ -1,5 +1,8 @@
 package edu.buffalo.cse605.main;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import edu.buffalo.cse605.list.Cursor;
 import edu.buffalo.cse605.list.FDList;
 import edu.buffalo.cse605.list.coarse.CursorCoarse;
@@ -17,6 +20,7 @@ import edu.buffalo.cse605.test.readPrev;
 
 public class Main {
 	public static void main(String[] args) {
+//		ExecutorService e = Executors.newFixedThreadPool(64);
 //		FDList<String> f = new FDList<String> ("hi");
 //		FDListCoarse<String> f = new FDListCoarse<String> ("hi");
 		FDListFine<String> f = new FDListFine<String> ("hi");
@@ -44,6 +48,8 @@ public class Main {
 			Thread[] threads = new Thread[nt];
 			for (int j = 0; j < nt ; j+=2) {
 				c = f.reader( f.head() );
+//				e.execute(new insertLeft(c, nt/2));
+//				e.execute(new insertRight(c, nt/2));
 				threads[j] = new Thread(new insertLeft(c, nt/2));
 				threads[j+1] = new Thread(new insertRight(c, nt/2));
 //				threads[j] = new Thread(new insertLeftCoarse(f, c, nt/2));
