@@ -17,7 +17,7 @@ public class insertLeft  extends Thread{
      
      @Override
 	public void run() {
-    	 for(int j=0; j < 200000/nt; j++){
+    	 for(int j=0; j < 20000/nt; j++){
         	 c.writer().insertBefore("beautiful" + j);
          }
      }

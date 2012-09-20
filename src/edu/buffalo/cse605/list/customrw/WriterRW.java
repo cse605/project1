@@ -3,6 +3,7 @@ package edu.buffalo.cse605.list.customrw;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 import edu.buffalo.cse605.list.Writer;
+import edu.buffalo.cse605.lock.ReadWriteLock;
 
 public class WriterRW<T> extends Writer<T> { 
  	
@@ -16,43 +17,30 @@ public class WriterRW<T> extends Writer<T> {
 		ElementRW<T> e = new ElementRW<T>(val);
 		ElementRW<T> prev;
 		ElementRW<T> curr;
-		WriteLock wprev;
-		WriteLock wcurr;
 		try {
 			while ( true ) {
 				prev = (ElementRW<T>) cursor.getprev();
 				curr = (ElementRW<T>) cursor.curr();
-				wprev = prev.rwnextlock.writeLock();
-				wcurr = prev.rwprevlock.writeLock();
+				prev.rwcnextlock.lockWrite();
+				curr.rwcprevlock.lockWrite();
 				// Make sure they are still pointing to the ones they were supposed to point
 				// This messes the performance
-				if ( wprev.tryLock() &&
-					 wcurr.tryLock() &&
-					 prev.next() == curr && 
+				if ( prev.next() == curr && 
 					 curr.prev() == prev ) {
 					if ( cursor.curr() == null ) {
 						 cursor.curr(e);
 					} else {
 						curr.addBefore(e);
 					}
-					wcurr.unlock();
-					wprev.unlock();
-					cursor.prev();
+					curr.rwcprevlock.unlockWrite();
+					prev.rwcnextlock.unlockWrite();
 					break;
-				} else {
-					if ( wcurr.isHeldByCurrentThread() ) {
-						wcurr.unlock();
-					}
-					if ( wprev.isHeldByCurrentThread() ) {
-						wprev.unlock();
-					}
-					Thread.yield();
-				}
+				} 
 			}
-			
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+		cursor.prev();
 		return true;
 	}
 
@@ -68,13 +56,11 @@ public class WriterRW<T> extends Writer<T> {
 			while ( true ) {
 				next = (ElementRW<T>) cursor.getnext();
 				curr = (ElementRW<T>) cursor.curr();
-				wnext = next.rwprevlock.writeLock();
-				wcurr = curr.rwnextlock.writeLock();
+				next.rwcprevlock.lockWrite();
+				curr.rwcnextlock.lockWrite();
 				// Make sure they are still pointing to the ones they were supposed to point
 				// This messes the performance
-				if ( wnext.tryLock() &&
-					 wcurr.tryLock() &&
-					 next.prev() == cursor.curr() && 
+				if ( next.prev() == cursor.curr() && 
 					 curr.next() == next ) {
 					if ( cursor.curr() == null ) {
 						 cursor.curr(e);
@@ -82,17 +68,9 @@ public class WriterRW<T> extends Writer<T> {
 						curr.addAfter(e);
 						cursor.next();
 					}
-					wnext.unlock();
-					wcurr.unlock();
+					next.rwcprevlock.lockWrite();
+					curr.rwcnextlock.lockWrite();
 					break;
-				} else {
-					if ( wcurr.isHeldByCurrentThread() ) {
-						wcurr.unlock();
-					}
-					if ( wnext.isHeldByCurrentThread() ) {
-						wnext.unlock();
-					}
-					Thread.yield();
 				}
 			}
 		} catch (Exception e1) {
