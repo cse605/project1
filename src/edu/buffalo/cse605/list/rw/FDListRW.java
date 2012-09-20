@@ -17,6 +17,6 @@ public class FDListRW<T> extends FDList<T> {
 	
 	
 	public CursorRW<T> reader(ElementRW<T> start) {
-		return new CursorRW<T>(start);
+		return new CursorRW<T>(start, this);
 	}
 }

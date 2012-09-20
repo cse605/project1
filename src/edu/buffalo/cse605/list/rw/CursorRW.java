@@ -7,9 +7,10 @@ import edu.buffalo.cse605.list.Writer;
 
 public class CursorRW<T> extends Cursor<T> {
 	
-	public CursorRW(ElementRW<T> start) {
+	public CursorRW(ElementRW<T> start, FDListRW<T> list) {
 		super(start);
 		this.curr = start; 
+		this.list = list;
 	}
 	
 	@Override

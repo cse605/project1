@@ -21,7 +21,7 @@ public class Main {
 		String scheme = args[0]; // list scheme
 		int nt = Integer.parseInt(args[1]); // Threads
 		int it =  Integer.parseInt(args[2]); // iterations
-		int els =  Integer.parseInt(args[3])/nt; // elements / number of threads
+		int els =  Integer.parseInt(args[3])/(nt/2); // elements / number of threads
 //		String test = args[4]; // testschemes
 		
 		FDList<String> f;
@@ -41,9 +41,6 @@ public class Main {
 		} else {
 			f = new FDList<String> ("hi");
 		}
-		
-		/* temp cursor on the head for validation */
-		temp = f.reader( f.head() );
 		
 //		new Thread(new readNext(f.reader( f.head() ))).start();
 //		new Thread(new readPrev(f.reader( f.head() ))).start();
@@ -78,6 +75,9 @@ public class Main {
 		}
 
 		System.out.println("Total running time => " + ttime/it);
+		
+		/* temp cursor on the head for validation */
+		temp = f.reader( f.head() );
 		
 		temp.next();
 		while(temp.curr() != f.head()) {
