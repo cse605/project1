@@ -4,6 +4,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import edu.buffalo.cse605.list.iface.IElement;
+import edu.buffalo.cse605.lock.ReadWriteLock;
 
 public class Element<T> implements IElement<T> {
     private T val;
@@ -15,6 +16,10 @@ public class Element<T> implements IElement<T> {
 	// Locks for RW
 	public ReentrantReadWriteLock rwnextlock;
 	public ReentrantReadWriteLock rwprevlock;
+	
+	// Locks for RW
+	public ReadWriteLock rwcnextlock;
+	public ReadWriteLock rwcprevlock;
     
     // Constructor
     public Element(T val) {
