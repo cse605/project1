@@ -10,6 +10,8 @@ import edu.buffalo.cse605.test.insertLeft;
 import edu.buffalo.cse605.test.insertLeftCoarse;
 import edu.buffalo.cse605.test.insertRight;
 import edu.buffalo.cse605.test.insertRightCoarse;
+import edu.buffalo.cse605.test.readNext;
+import edu.buffalo.cse605.test.readPrev;
 
 public class Main {
 	public static void main(String[] args) {
@@ -39,12 +41,16 @@ public class Main {
 		} else if (scheme.equals("crw")) {
 			f = new FDListCRW<String> ("hi");
 		} else {
-			System.out.println("testing...");
 			f = new FDList<String> ("hi");
 		}
 		
-//		new Thread(new readNext(f.reader( f.head() ))).start();
-//		new Thread(new readPrev(f.reader( f.head() ))).start();
+//		for (int i = 0; i < (64-nt); i++) {
+//			if ( i % 2 == 0 ) {
+//				new Thread(new readNext(f.reader( f.head() ))).start();
+//			} else {
+//				new Thread(new readPrev(f.reader( f.head() ))).start();
+//			}
+//		}
 		
 		System.out.println("=========== Scheme => " + scheme + "; Threads => " + nt + "; Els => " + els + " =========");
 		

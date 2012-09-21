@@ -39,7 +39,7 @@ public class WriterCRW<T> extends Writer<T> {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-//		cursor.prev();
+		cursor.prev();
 		return true;
 	}
 
@@ -75,7 +75,7 @@ public class WriterCRW<T> extends Writer<T> {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		} 
-//		cursor.next();
+		cursor.next();
 		return true;
 	}
 
