@@ -2,6 +2,8 @@ package edu.buffalo.cse605.list;
 
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 import edu.buffalo.cse605.list.iface.IElement;
 import edu.buffalo.cse605.lock.ReadWriteLock;
@@ -14,8 +16,10 @@ public class Element<T> implements IElement<T> {
 	public ReentrantLock nextlock;
 	public ReentrantLock prevlock;
 	// Locks for RW
-	public ReentrantReadWriteLock rwnextlock;
-	public ReentrantReadWriteLock rwprevlock;
+	public ReadLock rnextlock;
+	public ReadLock rprevlock;
+	public WriteLock wnextlock;
+	public WriteLock wprevlock;
 	
 	// Locks for RW
 	public ReadWriteLock rwcnextlock;

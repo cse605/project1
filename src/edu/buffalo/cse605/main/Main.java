@@ -24,7 +24,7 @@ public class Main {
 		int nt = Integer.parseInt(args[1]); // Threads
 		int it =  Integer.parseInt(args[2]); // iterations
 		int els =  Integer.parseInt(args[3])/(nt/2); // elements / number of threads
-//		String test = args[4]; // testschemes
+		int test = Integer.parseInt(args[4]); // testschemes
 		
 		FDList<String> f;
 		Cursor<String> c, temp;
@@ -44,43 +44,86 @@ public class Main {
 			f = new FDList<String> ("hi");
 		}
 		
-//		for (int i = 0; i < (64-nt); i++) {
-//			if ( i % 2 == 0 ) {
-//				new Thread(new readNext(f.reader( f.head() ))).start();
-//			} else {
-//				new Thread(new readPrev(f.reader( f.head() ))).start();
-//			}
-//		}
-		
-		System.out.println("=========== Scheme => " + scheme + "; Threads => " + nt + "; Els => " + els + " =========");
-		
-		for (int i = 0; i < it; i++) {
-			startTime = System.currentTimeMillis();
-			Thread[] threads = new Thread[nt];
-			for (int j = 0; j < nt ; j+=2) {
-				c = f.reader( f.head() );
-				if ( scheme.equals("coarse") ) {
-					threads[j] = new Thread(new insertLeftCoarse(f, c, els));
-					threads[j+1] = new Thread(new insertRightCoarse(f, c, els));
-				} else {
-					threads[j] = new Thread(new insertLeft(c, els));
-					threads[j+1] = new Thread(new insertRight(c, els));
+		System.out.println("=========== Test => " + test + "; Scheme => " + scheme + "; Threads => " + nt + "; Els => " + els + " =========");
+		switch(test) {
+		case 1:
+			els = els/2;
+			for (int i = 0; i < it; i++) {
+				startTime = System.currentTimeMillis();
+				Thread[] threads = new Thread[nt];
+				for (int j = 0; j < nt ; j+=2) {
+					c = f.reader( f.head() );
+					if ( scheme.equals("coarse") ) {
+						threads[j] = new Thread(new insertLeftCoarse(f, c, els));
+						threads[j+1] = new Thread(new insertRightCoarse(f, c, els));
+					} else {
+						threads[j] = new Thread(new insertLeft(c, els));
+						threads[j+1] = new Thread(new insertRight(c, els));
+					}
+					threads[j].start();
+					threads[j+1].start();
 				}
-				threads[j].start();
-				threads[j+1].start();
-			}
-			for (int j = 0; j < nt; j++) {
-				try {
-					threads[j].join();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				for (int j = 0; j < nt; j++) {
+					try {
+						threads[j].join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
+				endTime   = System.currentTimeMillis();
+				totalTime = endTime - startTime;
+				ttime += totalTime;
 			}
-			endTime   = System.currentTimeMillis();
-			totalTime = endTime - startTime;
-			ttime += totalTime;
-		}
 
+			break;
+			
+		case 2:
+			nt = nt/2;
+			
+			for (int i = nt; i < nt*2; i++) {
+				if ( i % 2 == 0 ) {
+					new Thread(new readNext(f.reader( f.head() ))).start();
+				} else {
+					new Thread(new readPrev(f.reader( f.head() ))).start();
+				}
+			}
+			
+			for (int i = 0; i < it; i++) {
+				startTime = System.currentTimeMillis();
+				Thread[] threads = new Thread[nt];
+				for (int j = 0; j < nt ; j+=2) {
+					c = f.reader( f.head() );
+					if ( scheme.equals("coarse") ) {
+						threads[j] = new Thread(new insertLeftCoarse(f, c, els));
+						threads[j+1] = new Thread(new insertRightCoarse(f, c, els));
+					} else {
+						threads[j] = new Thread(new insertLeft(c, els));
+						threads[j+1] = new Thread(new insertRight(c, els));
+					}
+					threads[j].start();
+					threads[j+1].start();
+				}
+				for (int j = 0; j < nt; j++) {
+					try {
+						threads[j].join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				endTime   = System.currentTimeMillis();
+				totalTime = endTime - startTime;
+				ttime += totalTime;
+			}
+				
+			break;
+			
+		case 3:
+			break;
+			
+		case 4:
+			break;
+		}
+		
 		System.out.println("Total running time => " + ttime/it);
 		
 		/* temp cursor on the head for validation */
@@ -96,13 +139,15 @@ public class Main {
 			n++;
 			temp.prev();
 		}
-		
 		System.out.println("Total List count => " + m + " => " + n + " => " + f.count);
+		
         System.out.println("==== Heap utilization statistics [MB] ====");
         System.out.println("Used Memory => " + (runtime.totalMemory() - runtime.freeMemory()) / mb);
         System.out.println("Free Memory => " + runtime.freeMemory() / mb);
         System.out.println("Total Memory => " + runtime.totalMemory() / mb);
         System.out.println("Max Memory => " + runtime.maxMemory() / mb);
+        
+        System.exit(1);
 
 //		System.out.println("current element pointed by cursor..." + c.curr().toString());
 //		

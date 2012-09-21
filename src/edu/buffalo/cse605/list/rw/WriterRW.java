@@ -14,16 +14,14 @@ public class WriterRW<T> extends Writer<T> {
 	@Override
 	public boolean insertBefore(T val) {
 		ElementRW<T> e = new ElementRW<T>(val);
-		ElementRW<T> prev;
-		ElementRW<T> curr;
-		WriteLock wprev;
-		WriteLock wcurr;
+		ElementRW<T> prev, curr;
+		WriteLock wprev, wcurr;
 		try {
 			while ( true ) {
 				prev = (ElementRW<T>) cursor.getprev();
 				curr = (ElementRW<T>) cursor.curr();
-				wprev = prev.rwnextlock.writeLock();
-				wcurr = prev.rwprevlock.writeLock();
+				wprev = prev.wnextlock;
+				wcurr = curr.wprevlock;
 				// Make sure they are still pointing to the ones they were supposed to point
 				// This messes the performance
 				if ( wprev.tryLock() &&
@@ -60,16 +58,14 @@ public class WriterRW<T> extends Writer<T> {
 	@Override
 	public boolean insertAfter(T val) {
 		ElementRW<T> e = new ElementRW<T>(val);
-		ElementRW<T> next;
-		ElementRW<T> curr;
-		WriteLock wnext;
-		WriteLock wcurr;
+		ElementRW<T> next, curr;
+		WriteLock wnext, wcurr;
 		try {
 			while ( true ) {
 				next = (ElementRW<T>) cursor.getnext();
 				curr = (ElementRW<T>) cursor.curr();
-				wnext = next.rwprevlock.writeLock();
-				wcurr = curr.rwnextlock.writeLock();
+				wnext = next.wprevlock;
+				wcurr = curr.wnextlock;
 				// Make sure they are still pointing to the ones they were supposed to point
 				// This messes the performance
 				if ( wnext.tryLock() &&
@@ -84,6 +80,7 @@ public class WriterRW<T> extends Writer<T> {
 					}
 					wnext.unlock();
 					wcurr.unlock();
+					cursor.next();
 					break;
 				} else {
 					if ( wcurr.isHeldByCurrentThread() ) {
@@ -98,27 +95,30 @@ public class WriterRW<T> extends Writer<T> {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		} 
-		cursor.next();
 		return true;
 	}
 
 	@Override
 	public boolean delete() {
-		ElementRW<T> prev;
-		ElementRW<T> curr;
-		ElementRW<T> next;
-		
+		ElementRW<T> prev, curr, next;
+		WriteLock wnext, wcurrp, wcurrn, wprev;
 		try {
 			while ( true ) {
 				prev = (ElementRW<T>) cursor.getprev();
 				next = (ElementRW<T>) cursor.getnext();
 				curr = (ElementRW<T>) cursor.curr();
+				
+				wprev = prev.wnextlock;
+				wcurrp = curr.wprevlock;
+				wcurrn = curr.wnextlock;
+				wnext = next.wprevlock;
+				
 				// Make sure they are still pointing to the ones they were supposed to point
 				// This messes the performance
-				if ( prev.nextlock.tryLock() &&
-					 curr.prevlock.tryLock() &&
-					 curr.nextlock.tryLock() &&
-					 next.prevlock.tryLock() &&
+				if ( wprev.tryLock() &&
+					 wcurrp.tryLock() &&
+					 wcurrn.tryLock() &&
+					 wnext.tryLock() &&
 					 prev.next() == curr && 
 					 curr.prev() == prev &&
 					 curr.next() == next &&
@@ -133,15 +133,15 @@ public class WriterRW<T> extends Writer<T> {
 						// Move the cursor to previous
 						cursor.curr(prev);
 					}
-					prev.nextlock.unlock();
-					next.prevlock.unlock();
+					wprev.unlock();
+					wnext.unlock();
 					break;
 				} else {
-					if ( prev.nextlock.isHeldByCurrentThread() ) {
-						prev.nextlock.unlock();
+					if ( wprev.isHeldByCurrentThread() ) {
+						wprev.unlock();
 					}
-					if ( next.prevlock.isHeldByCurrentThread() ) {
-						next.prevlock.unlock();
+					if ( wnext.isHeldByCurrentThread() ) {
+						wnext.unlock();
 					}
 					Thread.yield();
 				}

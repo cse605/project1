@@ -19,7 +19,7 @@ public class CursorRW<T> extends Cursor<T> {
 		ReadLock lock;
 		while (true) {
 			curr = this.curr;
-			lock = curr.rwnextlock.readLock();
+			lock = curr.rnextlock;
 			if ( lock.tryLock() ) {
 				this.curr = curr.next();
 				lock.unlock();
@@ -36,7 +36,7 @@ public class CursorRW<T> extends Cursor<T> {
 		ReadLock lock;
 		while (true) {
 			curr = this.curr;
-			lock = curr.rwprevlock.readLock();
+			lock = curr.rprevlock;
 			if ( lock.tryLock() ) {
 				this.curr = curr.prev();
 				lock.unlock();

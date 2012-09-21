@@ -47,7 +47,7 @@ public class WriterFine<T> extends Writer<T> {
 			e1.printStackTrace();
 		}
 		cursor.prev();
-		cursor.list.count.getAndIncrement();
+//		cursor.list.count.getAndIncrement();
 		return true;
 	}
 
@@ -89,7 +89,7 @@ public class WriterFine<T> extends Writer<T> {
 			e1.printStackTrace();
 		} 
 		cursor.next();
-		cursor.list.count.getAndIncrement();
+//		cursor.list.count.getAndIncrement();
 		return true;
 	}
 
@@ -140,7 +140,7 @@ public class WriterFine<T> extends Writer<T> {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		cursor.list.count.getAndDecrement();
+//		cursor.list.count.getAndDecrement();
 		return true;
 	}
 	

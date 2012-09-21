@@ -8,8 +8,10 @@ public class ElementRW<T> extends Element<T> {
 
 	public ElementRW(T val) {
 		super(val);
-		this.rwnextlock = new ReentrantReadWriteLock();
-		this.rwprevlock = new ReentrantReadWriteLock();
+		this.rnextlock = new ReentrantReadWriteLock().readLock();
+		this.rprevlock = new ReentrantReadWriteLock().readLock();
+		this.wprevlock = new ReentrantReadWriteLock().writeLock();
+		this.wnextlock = new ReentrantReadWriteLock().writeLock();
 	}
 
 }
