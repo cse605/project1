@@ -6,6 +6,7 @@ import edu.buffalo.cse605.list.coarse.FDListCoarse;
 import edu.buffalo.cse605.list.fine.FDListFine;
 import edu.buffalo.cse605.list.rw.FDListRW;
 import edu.buffalo.cse605.list.customrw.FDListCRW;
+import edu.buffalo.cse605.test.Delete;
 import edu.buffalo.cse605.test.insertLeft;
 import edu.buffalo.cse605.test.insertLeftCoarse;
 import edu.buffalo.cse605.test.insertRight;
@@ -48,6 +49,9 @@ public class Main {
 		els = els/(nt/2);
 		switch(test) {
 		case 1:
+			// Workload 1
+			// 64 threads
+			// 64 writes
 			els = els/2;
 			for (int i = 0; i < it; i++) {
 				startTime = System.currentTimeMillis();
@@ -79,6 +83,10 @@ public class Main {
 			break;
 			
 		case 2:
+			// Workload 3
+			// 64 threads
+			// 32 to read
+			// 32 write
 			nt = nt/2;
 			
 			for (int i = nt; i < nt*2; i++) {
@@ -119,9 +127,103 @@ public class Main {
 			break;
 			
 		case 3:
+			// Workload 3
+			// 64 threads
+			// 32 to read
+			// 16 write
+			// 16 delete
+			nt = nt/4;
+			
+			for (int i = nt*2; i < nt*4; i++) {
+				if ( i % 2 == 0 ) {
+					new Thread(new readNext(f.reader( f.head() ))).start();
+				} else {
+					new Thread(new readPrev(f.reader( f.head() ))).start();
+				}
+			}
+			
+			for (int i = 0; i < it; i++) {
+				startTime = System.currentTimeMillis();
+				Thread[] threads = new Thread[nt*2];
+				for (int j = 0; j < nt ; j+=2) {
+					c = f.reader( f.head() );
+					if ( scheme.equals("coarse") ) {
+						threads[j] = new Thread(new insertLeftCoarse(f, c, els));
+						threads[j+1] = new Thread(new insertRightCoarse(f, c, els));
+					} else {
+						threads[j] = new Thread(new insertLeft(c, els));
+						threads[j+1] = new Thread(new insertRight(c, els));
+					}
+					threads[j].start();
+					threads[j+1].start();
+				}
+				for (int j = nt; j < nt*2 ; j++) {
+					c = f.reader( f.head() );
+					threads[j] = new Thread(new Delete(c, els));
+					threads[j].start();
+				}
+				for (Thread thread:threads) {
+					try {
+						thread.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				endTime   = System.currentTimeMillis();
+				totalTime = endTime - startTime;
+				ttime += totalTime;
+			}
+			
 			break;
 			
 		case 4:
+			// Workload 4
+			// only 32 and 64
+			// 64 threads
+			// 48 to read
+			// 12 write
+			// 4 delete
+			nt = nt/4;
+			
+			for (int i = nt; i < nt*4; i++) {
+				if ( i % 2 == 0 ) {
+					new Thread(new readNext(f.reader( f.head() ))).start();
+				} else {
+					new Thread(new readPrev(f.reader( f.head() ))).start();
+				}
+			}
+			
+			for (int i = 0; i < it; i++) {
+				startTime = System.currentTimeMillis();
+				Thread[] threads = new Thread[nt];
+				for (int j = 0; j < (nt - nt/2) ; j+=2) {
+					c = f.reader( f.head() );
+					if ( scheme.equals("coarse") ) {
+						threads[j] = new Thread(new insertLeftCoarse(f, c, els));
+						threads[j+1] = new Thread(new insertRightCoarse(f, c, els));
+					} else {
+						threads[j] = new Thread(new insertLeft(c, els));
+						threads[j+1] = new Thread(new insertRight(c, els));
+					}
+					threads[j].start();
+					threads[j+1].start();
+				}
+				for (int j = nt; j < nt/2 ; j++) {
+					c = f.reader( f.head() );
+					threads[j] = new Thread(new Delete(c, els));
+					threads[j].start();
+				}
+				for (Thread thread:threads) {
+					try {
+						thread.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				endTime   = System.currentTimeMillis();
+				totalTime = endTime - startTime;
+				ttime += totalTime;
+			}
 			break;
 		}
 		

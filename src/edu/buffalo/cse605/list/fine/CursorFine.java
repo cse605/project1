@@ -13,6 +13,12 @@ public class CursorFine<T> extends Cursor<T> {
 	}
 	
 	@Override
+	public ElementFine<T> curr(Element<T> curr) {
+		this.curr = curr;
+		return (ElementFine<T>) this.curr;
+	}
+	
+	@Override
 	public void next() {
 		Element<T> curr;
 		while (true) {
