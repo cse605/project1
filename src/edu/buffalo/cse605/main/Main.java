@@ -208,14 +208,16 @@ public class Main {
 					threads[j].start();
 					threads[j+1].start();
 				}
-				for (int j = nt; j < nt/2 ; j++) {
+				for (int j = (nt - nt/2); j < nt ; j++) {
 					c = f.reader( f.head() );
 					threads[j] = new Thread(new Delete(c, els));
 					threads[j].start();
 				}
 				for (Thread thread:threads) {
 					try {
-						thread.join();
+						if ( thread == null ) {
+							thread.join();
+						}
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
