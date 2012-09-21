@@ -23,7 +23,7 @@ public class Main {
 		String scheme = args[0]; // list scheme
 		int nt = Integer.parseInt(args[1]); // Threads
 		int it =  Integer.parseInt(args[2]); // iterations
-		int els =  Integer.parseInt(args[3])/(nt/2); // elements / number of threads
+		int els =  Integer.parseInt(args[3]); // elements / number of threads
 		int test = Integer.parseInt(args[4]); // testschemes
 		
 		FDList<String> f;
@@ -45,6 +45,7 @@ public class Main {
 		}
 		
 		System.out.println("=========== Test => " + test + "; Scheme => " + scheme + "; Threads => " + nt + "; Els => " + els + " =========");
+		els = els/(nt/2);
 		switch(test) {
 		case 1:
 			els = els/2;

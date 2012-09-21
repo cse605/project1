@@ -14,32 +14,26 @@ public class CursorCRW<T> extends Cursor<T> {
 	@Override
 	public void next() {
 		Element<T> curr;
-		while (true) {
-			curr = this.curr;
-			try {
-				curr.rwcnextlock.lockRead();
-				this.curr = curr.next();
-				curr.rwcnextlock.unlockRead();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			break;
+		curr = this.curr;
+		try {
+			curr.rwcnextlock.lockRead();
+			this.curr = curr.next();
+			curr.rwcnextlock.unlockRead();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public void prev() {
 		Element<T> curr;
-		while (true) {
-			curr = this.curr;
-			try {
-				curr.rwcprevlock.lockRead();
-				this.curr = curr.prev();
-				curr.rwcprevlock.unlockRead();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			break;
+		curr = this.curr;
+		try {
+			curr.rwcprevlock.lockRead();
+			this.curr = curr.prev();
+			curr.rwcprevlock.unlockRead();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 
