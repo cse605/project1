@@ -140,13 +140,12 @@ public class Main {
 			n++;
 			temp.prev();
 		}
-		System.out.println("Total List count => " + m + " => " + n + " => " + f.count);
+//		System.out.println("Total List count => " + m + " => " + n + " => " + f.count);
 		
-        System.out.println("==== Heap utilization statistics [MB] ====");
         System.out.println("Used Memory => " + (runtime.totalMemory() - runtime.freeMemory()) / mb);
-        System.out.println("Free Memory => " + runtime.freeMemory() / mb);
-        System.out.println("Total Memory => " + runtime.totalMemory() / mb);
-        System.out.println("Max Memory => " + runtime.maxMemory() / mb);
+//        System.out.println("Free Memory => " + runtime.freeMemory() / mb);
+//        System.out.println("Total Memory => " + runtime.totalMemory() / mb);
+//        System.out.println("Max Memory => " + runtime.maxMemory() / mb);
         
         System.exit(1);
 
